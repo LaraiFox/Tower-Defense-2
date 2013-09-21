@@ -1,0 +1,77 @@
+--------------------------------------------------
+|					  IDEAS!				     |
+--------------------------------------------------
+
+ - Include flying entities that move directly to the goal.
+   - Flying entities need a special tower to kill them.
+ - Add some sort of laser tower
+   - Fires a straight beam of energy to damage creatures
+   - Weak but long range
+   - Hurt multiple entities by passing through them (collateral :D)
+   - Burn effect
+ - Different entity effects
+   - Burn
+   - Freeze / cold (slowed down)
+   - Electric? / stunned (paralyzed, can't move)
+   - 
+ - Multiplayer gameplay?
+   - How would that work? [ vs, co-op or both ]
+ - Rankings for levels { A to E rank }
+
+
+
+--------------------------------------------------
+|					TO DO LIST                   |
+--------------------------------------------------
+
+ - Add terrain objects (objects that appear in front of the terrain and entities)
+ - Remember to use glDeleteList(tiles[i].getDisplayListID(), 1) to free up memory after each level is completed or exited.
+ - Create a level editor!
+   - Could use the level editor to create the main game levels
+   - Default field would be all grass when opening a new blank level
+   - Must be able to:
+   	 - Save a level in the current format
+     - Load a level in the current format or in a previous format
+     - Change the data for the waves of entities
+     - Place tiles onto a blank field
+     - Place objects onto the field
+ - Create menus
+   - Options menu contains:
+     - Fps limit
+     - Resolution
+     - Fullscreen option
+     - Anti-aliasing
+     - Texture resolution?
+     - Keyboard control customization
+       - Presets?
+         - Grid layout
+         - Standard layout
+         - Numbered layout
+     - V-sync toggle
+     - Music volume
+     - Sound effect volume
+   - Main menu / title screen
+     - Include splashes?
+     - Animated background?
+     - Needs music
+   - Credits
+   - Quit
+   - Level editor setup
+   - Single player setup
+   - Multi player setup?
+   - Load saved games
+ - Add sounds into the game
+   - Towers firing
+   - Entities dying
+   - Entities getting through
+   - Building / selling towers
+   - Game over
+   - Button clicks
+   - Background music
+   - Terrain sound effects?
+ - Add a MenuManager to the game
+ - Add all the different menus required
+
+
+
+--------------------------------------------------

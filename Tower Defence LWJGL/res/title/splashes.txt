@@ -1,0 +1,15 @@
+//
+/*            : COMMENTED HEADER :
+/*      This is a list of splashes for the main title screen.
+/*
+/*      Lines starting with a slash or space as well as blank
+/*  lines will be ignored and treated as comments by the
+/*  program when retrieving a splash.
+/*
+//
+
+<insert witty comment here>
+This is a splash
+Uses LWJGL
+ADD means that you can't.. Oh look, a squirrel!
+The same quality as Minecraft
