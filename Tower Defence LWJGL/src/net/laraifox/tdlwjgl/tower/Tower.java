@@ -108,8 +108,7 @@ public abstract class Tower {
 	}
 
 	public void update(GameTimer gameTime, WaveManager waveManager) {
-		if ((targetWave < 0 || targetEntity < 0) || ((int) position.distanceTo(waveManager.getEntityAt(targetWave, targetEntity).position) > firingRadius)
-				|| !waveManager.getEntityAt(targetWave, targetEntity).alive) {
+		if ((targetWave < 0 || targetEntity < 0) || ((int) position.distanceTo(waveManager.getEntityAt(targetWave, targetEntity).position) > firingRadius) || !waveManager.getEntityAt(targetWave, targetEntity).alive) {
 			int nextEntity = -1;
 			int nextWave = -1;
 			int nextDistance = -1;
@@ -148,15 +147,47 @@ public abstract class Tower {
 		GL11.glPopMatrix();
 	}
 
+	public static void renderGhost(EnumTowerType towerType, int x, int y, boolean isValidLocation) {
+		int baseID = 0;
+		int turretID = 0;
+		switch (towerType) {
+		case Basic:
+			baseID = TowerBasic.getBaseDisplayListID();
+			turretID = TowerBasic.getTurretDisplayListID();
+			break;
+		case Fast:
+			baseID = TowerFast.getBaseDisplayListID();
+			turretID = TowerFast.getTurretDisplayListID();
+			break;
+		default:
+			return;
+		}
+
+		SpriteSheet.Towers.bindSheetTexture();
+		GL11.glPushMatrix();
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_ADD);
+		if (isValidLocation)
+			GL11.glColor4f(0.2f, 0.2f, 0.2f, 0.9f);
+		else
+			GL11.glColor4f(0.6f, 0.0f, 0.0f, 0.9f);
+		GL11.glTranslated(x + (towerType.getTiledWidth() * Tile.getTileSize()) / 2, y + (towerType.getTiledHeight() * Tile.getTileSize()) / 2, 0);
+		GL11.glCallList(baseID);
+		GL11.glRotatef(-90, 0, 0, 1);
+		GL11.glCallList(turretID);
+		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		GL11.glTexEnvi(GL11.GL_TEXTURE_ENV, GL11.GL_TEXTURE_ENV_MODE, GL11.GL_MODULATE);
+		GL11.glPopMatrix();
+	}
+
 	public Vector2 getPosition() {
 		return position;
 	}
 
-	public int getGridX() {
+	public int getTileX() {
 		return tiledX;
 	}
 
-	public int getGridY() {
+	public int getTileY() {
 		return tiledY;
 	}
 

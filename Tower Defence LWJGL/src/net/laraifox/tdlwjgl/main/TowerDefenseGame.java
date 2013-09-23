@@ -13,6 +13,7 @@ import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.enums.EnumGameState;
 import net.laraifox.tdlwjgl.enums.EnumProgramState;
 import net.laraifox.tdlwjgl.level.Tile;
+import net.laraifox.tdlwjgl.projectile.Projectile;
 import net.laraifox.tdlwjgl.tower.TowerBasic;
 import net.laraifox.tdlwjgl.tower.TowerFast;
 import net.laraifox.tdlwjgl.util.GameTimer;
@@ -35,7 +36,14 @@ public class TowerDefenseGame extends OpenGLDisplay {
 
 	public TowerDefenseGame() {
 		super("Tower Defense", 1024, 640, false, false, 60, 60);
+
+		// this.setOrtho(0, 1920, 0, 1080, -1, 1);
 	}
+
+	// @Override
+	// protected void createDisplay() throws LWJGLException {
+	// Display.create(new PixelFormat(8, 0, 0, 16));
+	// }
 
 	protected void initializeResources() {
 		try {
@@ -58,6 +66,7 @@ public class TowerDefenseGame extends OpenGLDisplay {
 			e.printStackTrace();
 		}
 
+		Projectile.initialize();
 		StringRenderer.initialize();
 		Tile.initialize();
 		TowerBasic.initialize();

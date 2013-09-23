@@ -17,7 +17,8 @@ import net.laraifox.tdlwjgl.util.SpriteSheet;
 import org.lwjgl.opengl.GL11;
 
 public class Tile {
-	private static final int TILE_COUNT = 256;
+	private static final int TEX_GRID_WIDTH = 16;
+	private static final int TEX_GRID_HEIGHT = 16;
 	private static final int TILE_SIZE = 32;
 	private static int[] displayListIDs;
 
@@ -32,8 +33,8 @@ public class Tile {
 	}
 
 	public static void initialize() {
-		Tile.displayListIDs = new int[TILE_COUNT];
-		for (int i = 0; i < TILE_COUNT; i++) {
+		Tile.displayListIDs = new int[TEX_GRID_WIDTH * TEX_GRID_HEIGHT];
+		for (int i = 0; i < displayListIDs.length; i++) {
 			int tx = i % 16;
 			int ty = (i - tx) / 16;
 

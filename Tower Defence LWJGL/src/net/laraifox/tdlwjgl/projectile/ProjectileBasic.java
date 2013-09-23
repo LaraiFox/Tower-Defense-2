@@ -1,13 +1,11 @@
 package net.laraifox.tdlwjgl.projectile;
 
-import java.awt.Rectangle;
-
-import net.laraifox.tdlwjgl.enums.EnumTowerType;
+import net.laraifox.tdlwjgl.enums.EnumProjectileType;
 
 public class ProjectileBasic extends Projectile {
-	public ProjectileBasic(EnumTowerType projectileType, double x, double y, float theta, double range, int waveIndex, int entityIndex) {
-		super(projectileType, x, y, theta, range, new Rectangle(1, 1, 4, 4), waveIndex, entityIndex, 2);
+	private static final EnumProjectileType projectileType = EnumProjectileType.Basic;
 
-		this.id = 0;
+	public ProjectileBasic(double x, double y, float theta, int waveIndex, int entityIndex) {
+		super(projectileType, x, y, theta, waveIndex, entityIndex);
 	}
 }
