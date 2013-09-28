@@ -1,14 +1,9 @@
 package net.laraifox.tdlwjgl.main;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Random;
 
 import net.laraifox.lib.display.OpenGLDisplay;
-import net.laraifox.lib.graphics.Texture;
-import net.laraifox.lib.graphics.TextureLoader;
+import net.laraifox.tdlwjgl.entity.Entity;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.enums.EnumGameState;
 import net.laraifox.tdlwjgl.enums.EnumProgramState;
@@ -19,7 +14,6 @@ import net.laraifox.tdlwjgl.tower.TowerFast;
 import net.laraifox.tdlwjgl.util.GameTimer;
 import net.laraifox.tdlwjgl.util.StringRenderer;
 
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 
 public class TowerDefenseGame extends OpenGLDisplay {
@@ -36,36 +30,30 @@ public class TowerDefenseGame extends OpenGLDisplay {
 
 	public TowerDefenseGame() {
 		super("Tower Defense", 1024, 640, false, false, 60, 60);
-
-		// this.setOrtho(0, 1920, 0, 1080, -1, 1);
 	}
 
-	// @Override
-	// protected void createDisplay() throws LWJGLException {
-	// Display.create(new PixelFormat(8, 0, 0, 16));
-	// }
-
 	protected void initializeResources() {
-		try {
-			Texture texture = TextureLoader.getTexture(new FileInputStream(new File("res/title/loading_screen.png")));
-			texture.bindTexture();
-			GL11.glBegin(GL11.GL_QUADS);
-			GL11.glTexCoord2f(0.0f, 1.0f);
-			GL11.glVertex2i(0, 0);
-			GL11.glTexCoord2f(1.0f, 1.0f);
-			GL11.glVertex2i(getWidth(), 0);
-			GL11.glTexCoord2f(1.0f, 0.0f);
-			GL11.glVertex2i(getWidth(), getHeight());
-			GL11.glTexCoord2f(0.0f, 0.0f);
-			GL11.glVertex2i(0, getHeight());
-			GL11.glEnd();
-			Display.update();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// Texture texture = TextureLoader.getTexture(new FileInputStream(new File("res/title/loading_screen.png")));
+		// texture.bindTexture();
+		// GL11.glBegin(GL11.GL_QUADS);
+		// GL11.glTexCoord2f(0.0f, 1.0f);
+		// GL11.glVertex2i(0, 0);
+		// GL11.glTexCoord2f(1.0f, 1.0f);
+		// GL11.glVertex2i(getWidth(), 0);
+		// GL11.glTexCoord2f(1.0f, 0.0f);
+		// GL11.glVertex2i(getWidth(), getHeight());
+		// GL11.glTexCoord2f(0.0f, 0.0f);
+		// GL11.glVertex2i(0, getHeight());
+		// GL11.glEnd();
+		// Display.update();
+		// } catch (FileNotFoundException e) {
+		// e.printStackTrace();
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
 
+		Entity.initialize();
 		Projectile.initialize();
 		StringRenderer.initialize();
 		Tile.initialize();
@@ -79,15 +67,15 @@ public class TowerDefenseGame extends OpenGLDisplay {
 		this.random = new Random();
 
 		this.menuManager = new MenuManager(getWidth(), getHeight(), random);
-		this.gameManager = new GameManager(random);
+		this.gameManager = new GameManager();
 
-		this.nextLevelName = "test_3";
+		this.nextLevelName = "prototype_level_1";
 
 		this.showFramerate = false;
 	}
 
 	protected void tick() {
-		System.out.println(gameTimer.toString());
+		// System.out.println(gameTimer.toString());
 	}
 
 	protected void update(double delta) {

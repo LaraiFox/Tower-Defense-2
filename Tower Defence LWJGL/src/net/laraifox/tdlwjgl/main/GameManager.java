@@ -1,13 +1,13 @@
 package net.laraifox.tdlwjgl.main;
 
-import java.util.Random;
+import java.io.FileNotFoundException;
 
 import net.laraifox.lib.graphics.Color3f;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.enums.EnumGameState;
 import net.laraifox.tdlwjgl.enums.EnumProgramState;
 import net.laraifox.tdlwjgl.level.Level;
-import net.laraifox.tdlwjgl.level.LevelGenerator;
+import net.laraifox.tdlwjgl.level.LevelFormatter;
 import net.laraifox.tdlwjgl.util.GameTimer;
 import net.laraifox.tdlwjgl.util.StringRenderer;
 
@@ -16,18 +16,14 @@ import org.lwjgl.input.Keyboard;
 public class GameManager {
 	private EnumGameState gameState;
 
-	private Random random;
-
 	private Level leveltest;
 	private boolean isLevelOpen;
 
 	private boolean KEY_ESCAPE;
 	private boolean KEY_RETURN;
 
-	public GameManager(Random random) {
+	public GameManager() {
 		this.gameState = EnumGameState.SinglePlayer;
-
-		this.random = random;
 
 		this.leveltest = new Level();
 		this.isLevelOpen = false;
@@ -42,8 +38,13 @@ public class GameManager {
 	}
 
 	public void openLevel(String levelName) {
-		leveltest = LevelGenerator.generateLevelFrom("res/blueprints/" + levelName + ".txt", random, true);
-		isLevelOpen = true;
+		// leveltest = LevelGenerator.generateLevelFrom("res/blueprints/" + levelName + ".txt", random, true);
+		try {
+			leveltest = LevelFormatter.loadLevel("res/blueprints/" + levelName + ".txt");
+			isLevelOpen = true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void closeLevel() {
@@ -64,12 +65,6 @@ public class GameManager {
 		}
 
 		if (gameState == EnumGameState.SinglePlayer) {
-			if (leveltest.hasLevelErrorOccurred()) {
-				closeLevel();
-				gameState = EnumGameState.None;
-				game.setProgramState(EnumProgramState.Menu);
-				return;
-			}
 			leveltest.update(gameTime);
 
 			if (leveltest.isLevelComplete()) {

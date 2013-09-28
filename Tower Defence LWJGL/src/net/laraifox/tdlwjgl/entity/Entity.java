@@ -1,186 +1,167 @@
 package net.laraifox.tdlwjgl.entity;
 
+import static org.lwjgl.opengl.GL11.GL_COMPILE;
 import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glEndList;
+import static org.lwjgl.opengl.GL11.glGenLists;
+import static org.lwjgl.opengl.GL11.glNewList;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2i;
 
 import java.awt.Rectangle;
 
-import net.laraifox.lib.graphics.Texture;
 import net.laraifox.lib.math.Vector;
 import net.laraifox.lib.math.Vector2;
 import net.laraifox.tdlwjgl.enums.EnumDirection;
-import net.laraifox.tdlwjgl.enums.EnumWaypoint;
-import net.laraifox.tdlwjgl.level.Level;
+import net.laraifox.tdlwjgl.enums.EnumEntityType;
+import net.laraifox.tdlwjgl.level.Player;
 import net.laraifox.tdlwjgl.level.Tile;
+import net.laraifox.tdlwjgl.level.Waypoint;
 import net.laraifox.tdlwjgl.util.SpriteSheet;
 
+import org.lwjgl.opengl.GL11;
+
 public abstract class Entity {
-	public static Texture texture;
+	public static final int TYPE_BASIC = 0;
+	public static final int TYPE_FAST = 1;
+	public static final int TYPE_ARMORED = 2;
+	public static final int TYPE_STRONG = 3;
 
-	public Vector2 position;
-	public boolean alive;
+	private static final int TEX_GRID_WIDTH = 16;
+	private static final int TEX_GRID_HEIGHT = 16;
+	private static final int ENTITY_SIZE = 32;
+	private static int[] displayListIDs;
 
-	private int id;
-	private short reward;
-	private int width, height;
-	private int lastWaypointX, lastWaypointY;
+	private EnumEntityType entityType;
+	private int entityID;
+	private int health;
+	private int reward;
+	private float speed;
+	private Rectangle hitbox;
 
-	protected EnumDirection direction;
-	protected float speed;
-	protected Vector2 vector;
-	protected Rectangle hitboxSize;
-	protected int health;
+	private Vector2 position;
+	private Vector2 center;
+	private Vector2 velocity;
+	private boolean alive;
 
-	public Entity(int id, int gridX, int gridY, EnumDirection initialDirection, float speed, Rectangle hitboxSize, short reward, int health) {
-		this.position = new Vector2(gridX * Tile.getTileSize(), gridY * Tile.getTileSize());
+	private EnumDirection direction;
+	private int waypointIndex;
+
+	public Entity(EnumEntityType entityType) {
+		this.entityType = entityType;
+		this.entityID = entityType.getEntityID();
+		this.health = entityType.getHealth();
+		this.reward = entityType.getReward();
+		this.speed = entityType.getSpeed();
+		this.hitbox = entityType.getHitbox();
+
+		this.position = new Vector2(0, 0);
+		this.center = new Vector2(ENTITY_SIZE / 2, ENTITY_SIZE / 2);
+		this.velocity = Vector.scale(direction.getVector(), speed);
 		this.alive = false;
 
-		this.id = id;
-		this.reward = reward;
-		this.width = Tile.getTileSize();
-		this.height = Tile.getTileSize();
-		this.lastWaypointX = gridX;
-		this.lastWaypointY = gridY;
-
-		this.direction = initialDirection;
-		this.speed = speed;
-		this.vector = Vector.scale(initialDirection.getVector(), speed);
-		this.hitboxSize = hitboxSize;
-		this.health = health;
+		this.direction = EnumDirection.None;
+		this.waypointIndex = 0;
 	}
 
-	public short getReward() {
+	public static void initialize() {
+		Entity.displayListIDs = new int[TEX_GRID_WIDTH * TEX_GRID_HEIGHT];
+		for (int i = 0; i < displayListIDs.length; i++) {
+			int tx = i % 16;
+			int ty = (i - tx) / 16;
+
+			float left = SpriteSheet.Entities.getLeftOfTile(tx);
+			float right = SpriteSheet.Entities.getRightOfTile(tx, 1);
+			float top = SpriteSheet.Entities.getTopOfTile(ty, 1);
+			float bottom = SpriteSheet.Entities.getBottomOfTile(ty);
+
+			displayListIDs[i] = glGenLists(1);
+			glNewList(displayListIDs[i], GL_COMPILE);
+			glBegin(GL_QUADS);
+			glTexCoord2f(left, top);
+			glVertex2i(0, 0);
+			glTexCoord2f(right, top);
+			glVertex2i(ENTITY_SIZE, 0);
+			glTexCoord2f(right, bottom);
+			glVertex2i(ENTITY_SIZE, ENTITY_SIZE);
+			glTexCoord2f(left, bottom);
+			glVertex2i(0, ENTITY_SIZE);
+			glEnd();
+			glEndList();
+		}
+	}
+
+	public int getReward() {
 		return reward;
 	}
 
-	public int getWidth() {
-		return width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
 	public Rectangle getHitbox() {
-		return new Rectangle((int) (position.getX() + hitboxSize.getX()), (int) (position.getY() + hitboxSize.getY()), hitboxSize.width, hitboxSize.height);
+		return new Rectangle((int) (getPosition().getX() + hitbox.getX()), (int) (getPosition().getY() + hitbox.getY()), hitbox.width, hitbox.height);
 	}
 
-	public void update(Level level) {
+	public void setSpawnWaypoint(Waypoint waypoint) {
+		this.position = new Vector2(waypoint.getX(), waypoint.getY()).scale(Tile.getTileSize());
+		this.direction = waypoint.getDirection();
+	}
+
+	public void update(Player player, Waypoint waypoint) {
 		if (health <= 0) {
-			Level.player.money += reward;
-			alive = false;
+			player.money += reward;
+			setAlive(false);
 			return;
 		}
 
-		if ((position.getX() % Tile.getTileSize() > -speed) && (position.getX() % Tile.getTileSize() < speed)
-				&& (position.getY() % Tile.getTileSize() > -speed) && (position.getY() % Tile.getTileSize() < speed)) {
-			int x = (int) (position.getX() / Tile.getTileSize());
-			int y = (int) (position.getY() / Tile.getTileSize());
+		if ((getPosition().getX() % Tile.getTileSize() > -speed) && (getPosition().getX() % Tile.getTileSize() < speed)
+				&& (getPosition().getY() % Tile.getTileSize() > -speed) && (getPosition().getY() % Tile.getTileSize() < speed)) {
+			int x = (int) (getPosition().getX() / Tile.getTileSize());
+			int y = (int) (getPosition().getY() / Tile.getTileSize());
 
-			EnumWaypoint waypoint = level.getTileAt(x + y * Level.DEFAULT_WIDTH).getWaypoint();
-
-			if (waypoint != EnumWaypoint.None) {
-				setNewWaypoint(waypoint, x, y);
+			if (waypoint.getX() == x && waypoint.getY() == y) {
+				direction = waypoint.getDirection();
+				velocity = Vector.scale(direction.getVector(), speed);
+				waypointIndex++;
+				if (direction == EnumDirection.None) {
+					player.removeLife();
+					setAlive(false);
+					return;
+				}
 			}
 		}
 
-		position.add(vector);
+		getPosition().add(velocity);
 	}
 
 	public void render() {
-		int i = id + direction.getTextureIndex();
-
-		int tx = i % 16;
-		int ty = (i - tx) / 16;
-
-		float left = SpriteSheet.Entities.getLeftOfTile(tx);
-		float right = SpriteSheet.Entities.getRightOfTile(tx, 1);
-		float top = SpriteSheet.Entities.getTopOfTile(ty, 1);
-		float bottom = SpriteSheet.Entities.getBottomOfTile(ty);
-
 		SpriteSheet.Entities.bindSheetTexture();
-		glBegin(GL_QUADS);
-		{
-			glTexCoord2f(left, top);
-			glVertex2i((int) position.getX(), (int) position.getY());
-
-			glTexCoord2f(right, top);
-			glVertex2i((int) position.getX() + 32, (int) position.getY());
-
-			glTexCoord2f(right, bottom);
-			glVertex2i((int) position.getX() + 32, (int) position.getY() + 32);
-
-			glTexCoord2f(left, bottom);
-			glVertex2i((int) position.getX(), (int) position.getY() + 32);
-		}
-		glEnd();
-	}
-
-	public void setNewWaypoint(EnumWaypoint waypoint, int lastWaypointX, int lastWaypointY) {
-		// Change direction
-
-		if (waypoint == EnumWaypoint.End) {
-			direction = EnumDirection.None;
-			Level.player.removeLife();
-			alive = false;
-		} else if ((lastWaypointX != this.lastWaypointX) || (lastWaypointY != this.lastWaypointY)) {
-			switch (direction) {
-			case None:
-				alive = false;
-				break;
-			case Up:
-				if (waypoint == EnumWaypoint.Left) {
-					direction = EnumDirection.Left;
-				} else if (waypoint == EnumWaypoint.Right) {
-					direction = EnumDirection.Right;
-				} else if (waypoint == EnumWaypoint.Back) {
-					direction = EnumDirection.Down;
-				}
-				break;
-			case Down:
-				if (waypoint == EnumWaypoint.Left) {
-					direction = EnumDirection.Right;
-				} else if (waypoint == EnumWaypoint.Right) {
-					direction = EnumDirection.Left;
-				} else if (waypoint == EnumWaypoint.Back) {
-					direction = EnumDirection.Up;
-				}
-				break;
-			case Left:
-				if (waypoint == EnumWaypoint.Left) {
-					direction = EnumDirection.Down;
-				} else if (waypoint == EnumWaypoint.Right) {
-					direction = EnumDirection.Up;
-				} else if (waypoint == EnumWaypoint.Back) {
-					direction = EnumDirection.Right;
-				}
-				break;
-			case Right:
-				if (waypoint == EnumWaypoint.Left) {
-					direction = EnumDirection.Up;
-				} else if (waypoint == EnumWaypoint.Right) {
-					direction = EnumDirection.Down;
-				} else if (waypoint == EnumWaypoint.Back) {
-					direction = EnumDirection.Left;
-				}
-				break;
-			default:
-				direction = EnumDirection.None;
-				alive = false;
-				break;
-			}
-
-			vector = Vector.scale(direction.getVector(), speed);
-
-			this.lastWaypointX = lastWaypointX;
-			this.lastWaypointY = lastWaypointY;
-		}
+		GL11.glPushMatrix();
+		GL11.glTranslated(position.getX(), position.getY(), 0);
+		GL11.glCallList(displayListIDs[entityID + direction.ordinal() - 1]);
+		GL11.glPopMatrix();
 	}
 
 	public void dealDamage(int damage) {
 		health -= damage;
+	}
+
+	public Vector2 getPosition() {
+		return position;
+	}
+
+	public Vector2 getCenter() {
+		return center;
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
+	public int getWaypointIndex() {
+		return waypointIndex;
 	}
 }

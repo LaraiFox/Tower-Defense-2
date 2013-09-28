@@ -29,23 +29,23 @@
 
 
 
-// List of waypoint location lists for entities using the format [ x:y:dir ].
-// X and Y positions start at 00:00 being the top left corner. Waypoint position data is encoded using a decimal number.
+// List of waypoint location lists for entities using the format [ x:y:direction ].
+// X and Y positions start at 00:00 being the bottom left corner. Waypoint position data is encoded using a decimal number.
 // Direction turns clockwise starting at 0 facing right. A direction of 4 is used to show the end location.
 #WaypointData {
-   00:05:0 04:05:1 04:08:0 08:08:3 08:04:0 13:04:1 13:11:2 06:11:3 06:09:0 10:09:3 10:07:4
+   00:11:0 04:11:1 04:08:0 08:08:3 08:11:0 13:11:1 13:04:2 06:04:3 06:06:0 10:06:3 10:08:4
 }
 
 
 
-// List of entity waves for the level using the format [ type:length:delay:(spawnpoint):(spawnrate) ].
+// List of entity waves for the level using the format [ type:length:delay:spawnpoint(:spawnrate) ].
 // Entity type is a value representing the entity's ID. Entity type data is encoded using a hexadecimal number.
 // Wave length indicates the number of entities to spawn before the wave ends using a decimal number.
 // Delay represents the time to wait before starting the wave in seconds using a decimal number.
-// 
-// Spawnpoint is only used when there are more that one spawnpoint available
+// Spawnpoint is only used when there are more that one spawnpoint available.
+// Spawnrate is the amount of time in deciseconds between entity spawns. (+1 decisecond is added on automatically)
 #EntityData {
-   00:08:16:: 01:18:16:: 01:18:16:: 00:08:16:: 00:08:16:: 01:18:16:: 00:08:16:: 01:08:16:: 01:18:16:: 00:18:16:: 00:08:16:: 00:08:16:: 01:08:16:: 00:18:16:: 01:08:16:: 01:18:16::
+   00:08:00:0 01:18:16:0 01:18:16:0 00:08:16:0 00:08:16:0 01:18:16:0 00:08:16:0 01:08:16:0 01:18:16:0 00:18:16:0 00:08:16:0 00:08:16:0 01:08:16:0 00:18:16:0 01:08:16:0 01:18:16:0
 }
 
 

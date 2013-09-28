@@ -16,33 +16,34 @@ public abstract class Projectile {
 	private static final int PROJECTILE_SIZE = 8;
 	private static int[] displayListIDs;
 
-	protected int projectileID;
-	protected Vector2 position;
-	protected Vector2 previousPosition;
-	protected float theta;
-
 	private EnumProjectileType projectileType;
-	private double range;
+	private int projectileID;
+	private Vector2 position;
+	private Vector2 previousPosition;
 	private Vector2 velocity;
-	private int waveIndex;
-	private int entityIndex;
+	private float theta;
+
+	private boolean alive;
+	private double range;
 	private int damage;
 	private int ticks;
+	private int waveIndex;
+	private int entityIndex;
 
-	public boolean alive = false;
-
-	public Projectile(EnumProjectileType projectileType, double x, double y, float theta, int waveIndex, int entityIndex) {
-		this.projectileID = projectileType.getProjectileID();
+	public Projectile(EnumProjectileType projectileType, Vector2 position, float theta, int waveIndex, int entityIndex) {
 		this.projectileType = projectileType;
-		this.position = new Vector2(x, y);
-		this.previousPosition = new Vector2(x, y);
-		this.theta = theta;
-		this.range = projectileType.getBaseRange();
+		this.projectileID = projectileType.getProjectileID();
+		this.position = new Vector2(position);
+		this.previousPosition = new Vector2(position);
 		this.velocity = Vector2.Zero();
-		this.waveIndex = waveIndex;
-		this.entityIndex = entityIndex;
+		this.theta = theta;
+
+		this.alive = false;
+		this.range = projectileType.getBaseRange() * 50;
 		this.damage = projectileType.getBaseDamage();
 		this.ticks = 0;
+		this.waveIndex = waveIndex;
+		this.entityIndex = entityIndex;
 	}
 
 	public static void initialize() {
@@ -76,8 +77,8 @@ public abstract class Projectile {
 	}
 
 	public void update(Entity entity) {
-		Vector2 vectorToEnity = new Vector2(entity.position);
-		vectorToEnity.add(new Vector2(entity.getWidth(), entity.getHeight()).scale(0.5));
+		Vector2 vectorToEnity = new Vector2(entity.getPosition());
+		vectorToEnity.add(entity.getCenter().scale(0.5));
 		vectorToEnity.subtract(position);
 		theta = (float) Math.atan2(vectorToEnity.getY(), vectorToEnity.getX());
 
@@ -86,11 +87,11 @@ public abstract class Projectile {
 		position.add(velocity);
 
 		if (velocity.length() * ticks > range) {
-			alive = false;
+			setAlive(false);
 			return;
-		} else if (!entity.alive) {
+		} else if (!entity.isAlive()) {
 			if (velocity.lengthSq() * ticks > (vectorToEnity.getX() * vectorToEnity.getX() + vectorToEnity.getY() * vectorToEnity.getY())) {
-				alive = false;
+				setAlive(false);
 				return;
 			}
 		}
@@ -129,5 +130,13 @@ public abstract class Projectile {
 
 	public int getEntityIndex() {
 		return entityIndex;
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
 	}
 }

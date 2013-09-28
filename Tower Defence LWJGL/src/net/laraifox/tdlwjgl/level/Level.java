@@ -2,12 +2,10 @@ package net.laraifox.tdlwjgl.level;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import net.laraifox.tdlwjgl.enums.EnumEntityType;
+import net.laraifox.tdlwjgl.entity.Entity;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.enums.EnumTowerType;
-import net.laraifox.tdlwjgl.enums.EnumWaypoint;
 import net.laraifox.tdlwjgl.projectile.Projectile;
 import net.laraifox.tdlwjgl.projectile.ProjectileBasic;
 import net.laraifox.tdlwjgl.projectile.ProjectileFast;
@@ -22,19 +20,12 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class Level {
-	public boolean levelLoadedWithoutErrors = true;
-
-	public static final Player player = new Player();
-
-	public static final int DEFAULT_WIDTH = 24;
-	public static final int DEFAULT_HEIGHT = 17;
-
 	protected Tile[] tiles;
 	protected int width, height;
 	protected WaveManager waveManager;
+	protected List<WaypointList> waypointLists;
 
-	private boolean levelErrorOccurred;
-
+	private Player player;
 	private List<Projectile> projectiles;
 	private List<Tower> towers;
 
@@ -46,46 +37,15 @@ public class Level {
 	private boolean KEY_SPACE;
 
 	public Level() {
-		player.reset();
-
+		this.player = new Player();
 		this.projectiles = new ArrayList<Projectile>();
-
-		this.tiles = new Tile[DEFAULT_WIDTH * DEFAULT_HEIGHT];
-		for (int i = 0; i < DEFAULT_WIDTH * DEFAULT_HEIGHT; i++) {
-			this.tiles[i] = tiles[i];
-		}
-
+		this.tiles = new Tile[0];
 		this.towers = new ArrayList<Tower>();
-
 		this.selectedTowerType = EnumTowerType.None;
-	}
-
-	public Level(Random random) {
-		int w = 24, h = 17;
-		tiles = new Tile[w * h];
-		for (int x = 0; x < w; x++) {
-			for (int y = 0; y < h; y++) {
-				int i = random.nextInt(20);
-				tiles[x + y * w] = new Tile((i < 16 ? 0 : i < 19 ? 3 : 1), true, EnumWaypoint.None);
-			}
-		}
-		this.selectedTowerType = EnumTowerType.None;
-	}
-
-	public boolean hasLevelErrorOccurred() {
-		return levelErrorOccurred;
-	}
-
-	public void setLevelErrorOccurred(boolean levelErrorOccurred) {
-		this.levelErrorOccurred = levelErrorOccurred;
+		this.waveManager = new WaveManager();
 	}
 
 	public Tile getTileAt(int i) {
-		if (i >= tiles.length) {
-			setLevelErrorOccurred(true);
-			i = 0;
-		}
-
 		return tiles[i];
 	}
 
@@ -93,13 +53,8 @@ public class Level {
 		return waveManager.isFinished();
 	}
 
-	public void addWave(EnumEntityType waveType, byte length, short spawnrate) {
-
-	}
-
 	private void buildTower(EnumTowerType towerType, int x, int y) {
 		Tower newTower = null;
-
 		switch (towerType) {
 		case Basic:
 			newTower = new TowerBasic(x, y);
@@ -114,7 +69,7 @@ public class Level {
 		if (newTower != null && player.money >= newTower.getCost()) {
 			towers.add(newTower);
 			player.money -= newTower.getCost();
-			tiles[x + y * DEFAULT_WIDTH].setCanPlaceTower(false);
+			tiles[x + y * width].setCanPlaceTower(false);
 		}
 	}
 
@@ -123,58 +78,65 @@ public class Level {
 			if (towers.get(i).getTileX() == x && towers.get(i).getTileY() == y) {
 				player.money += (int) (towers.get(i).getCost() * 0.75);
 				towers.remove(i);
-				tiles[x + y * DEFAULT_WIDTH].setCanPlaceTower(true);
+				tiles[x + y * width].setCanPlaceTower(true);
 			}
 		}
 	}
 
 	private void createProjectile(Tower tower) {
-		Projectile p = null;
-
+		Projectile projectile = null;
 		switch (tower.getTowerType()) {
 		case Basic:
-			p = new ProjectileBasic(tower.getPosition().getX() + tower.getWidth() / 2, tower.getPosition().getY() + tower.getHeight() / 2, tower.getTheta(), tower.getTargetWave(), tower.getTargetEntity());
-			p.alive = true;
-			projectiles.add(p);
+			projectile = new ProjectileBasic(tower.getCenter(), tower.getTheta(), tower.getTargetWave(), tower.getTargetEntity());
+			projectile.setAlive(true);
 			break;
 		case Fast:
-			p = new ProjectileFast(tower.getPosition().getX() + tower.getWidth() / 2, tower.getPosition().getY() + tower.getHeight() / 2, tower.getTheta(), tower.getTargetWave(), tower.getTargetEntity());
-			p.alive = true;
-			projectiles.add(p);
+			projectile = new ProjectileFast(tower.getCenter(), tower.getTheta(), tower.getTargetWave(), tower.getTargetEntity());
+			projectile.setAlive(true);
 			break;
 		default:
 			break;
 		}
+		if (projectile != null)
+			projectiles.add(projectile);
 	}
 
-	public void update(GameTimer gameTime) {
+	public void update(GameTimer gameTimer) {
 		StringRenderer.addString("Lives: " + player.getLives(), 16, 32, EnumFontSize.Small);
 		StringRenderer.addString("Money: " + player.money, 16, 48, EnumFontSize.Small);
 
 		for (int i = 0; i < projectiles.size(); i++) {
-			if (!projectiles.get(i).alive) {
+			if (!projectiles.get(i).isAlive()) {
 				projectiles.remove(i);
 				continue;
 			}
 
-			Projectile p = projectiles.get(i);
-
-			projectiles.get(i).update(waveManager.getWaveAt(p.getWaveIndex()).getEntityAt(p.getEntityIndex()));
-
-			if (projectiles.get(i).pathIntersects(waveManager.getEntityAt(p.getWaveIndex(), p.getEntityIndex()).getHitbox())) {
-				waveManager.getEntityAt(p.getWaveIndex(), p.getEntityIndex()).dealDamage(p.getDamage());
-				projectiles.get(i).alive = false;
+			Entity target = waveManager.getEntityAt(projectiles.get(i).getWaveIndex(), projectiles.get(i).getEntityIndex());
+			projectiles.get(i).update(target);
+			if (projectiles.get(i).pathIntersects(target.getHitbox())) {
+				target.dealDamage(projectiles.get(i).getDamage());
+				projectiles.get(i).setAlive(false);
 			}
 		}
 
-		waveManager.update(this);
+		waveManager.update(gameTimer, this);
 
 		if (Mouse.isButtonDown(0)) {
-			int x = (Mouse.getX() - 32) / Tile.getTileSize();
-			int y = (Mouse.getY() - 32) / Tile.getTileSize();
+			int x = Mouse.getX() / Tile.getTileSize() - 1;
+			int y = Mouse.getY() / Tile.getTileSize() - 1;
+			if (x >= 0 && x < width && y >= 0 && y < height) {
+				if (tiles[x + y * width].canPlaceTower()) {
+					buildTower(selectedTowerType, x, y);
+				}
+			}
+		}
 
-			if (x >= 0 && x < DEFAULT_WIDTH && y >= 0 && y < DEFAULT_HEIGHT) {
-				if (tiles[x + y * DEFAULT_WIDTH].canPlaceTower()) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_RETURN)) {
+			for (int i = 0; i < tiles.length; i++) {
+				int x = i % width;
+				int y = i / width;
+				if (tiles[x + y * width].canPlaceTower()) {
+					player.money += selectedTowerType.getBaseCost();
 					buildTower(selectedTowerType, x, y);
 				}
 			}
@@ -182,12 +144,15 @@ public class Level {
 
 		if (Mouse.isButtonDown(1)) {
 			if (!MOUSE_3) {
-				int x = (Mouse.getX() - 32) / Tile.getTileSize();
-				int y = (Mouse.getY() - 32) / Tile.getTileSize();
-
-				if (x >= 0 && x < DEFAULT_WIDTH && y >= 0 && y < DEFAULT_HEIGHT) {
-					if (!tiles[x + y * DEFAULT_WIDTH].canPlaceTower()) {
-						destroyTower(x, y);
+				if (selectedTowerType != EnumTowerType.None) {
+					selectedTowerType = EnumTowerType.None;
+				} else {
+					int x = Mouse.getX() / Tile.getTileSize() - 1;
+					int y = Mouse.getY() / Tile.getTileSize() - 1;
+					if (x >= 0 && x < width && y >= 0 && y < height) {
+						if (!tiles[x + y * width].canPlaceTower()) {
+							destroyTower(x, y);
+						}
 					}
 				}
 			}
@@ -207,8 +172,8 @@ public class Level {
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			if (!KEY_SPACE) {
-				if (waveManager.isStarted())
-					waveManager.nextWave();
+				if (waveManager.isGameStarted())
+					waveManager.startNextWave(gameTimer);
 				else
 					waveManager.start();
 			}
@@ -218,8 +183,8 @@ public class Level {
 			player.money += 10;
 
 		for (int i = 0; i < towers.size(); i++) {
-			towers.get(i).update(gameTime, waveManager);
-			if (towers.get(i).canFire(gameTime))
+			towers.get(i).update(gameTimer, waveManager);
+			if (towers.get(i).canFire(gameTimer))
 				createProjectile(towers.get(i));
 		}
 
@@ -257,23 +222,25 @@ public class Level {
 		for (int i = 0; i < towers.size(); i++)
 			towers.get(i).render();
 
-		if (selectedTowerType != EnumTowerType.None)
-			renderGhostTower();
+		if (selectedTowerType != EnumTowerType.None) {
+			int x = Mouse.getX() / Tile.getTileSize() - 1;
+			int y = Mouse.getY() / Tile.getTileSize() - 1;
+			if (x >= 0 && x < width && y >= 0 && y < height) {
+				Tower.renderGhost(selectedTowerType, x * Tile.getTileSize(), y * Tile.getTileSize(), tiles[x + y * width].canPlaceTower());
+			}
+		}
 		GL11.glPopMatrix();
-
 	}
 
-	private void renderGhostTower() {
-		int x = Mouse.getX() / Tile.getTileSize() - 1;
-		int y = Mouse.getY() / Tile.getTileSize() - 1;
+	public int getWaypointListLength(int i) {
+		return waypointLists.get(i).getLength();
+	}
 
-		if (x >= 0 && x < DEFAULT_WIDTH && y >= 0 && y < DEFAULT_HEIGHT) {
-			boolean isValidLocation = tiles[x + y * DEFAULT_WIDTH].canPlaceTower();
+	public Waypoint getWaypoint(int i, int j) {
+		return waypointLists.get(i).getWaypoint(j);
+	}
 
-			x = x * Tile.getTileSize();
-			y = y * Tile.getTileSize();
-
-			Tower.renderGhost(selectedTowerType, x, y, isValidLocation);
-		}
+	public Player getPlayer() {
+		return player;
 	}
 }

@@ -24,12 +24,10 @@ public class Tile {
 
 	private int tileID;
 	private boolean canPlaceTower;
-	private EnumWaypoint waypoint;
 
 	public Tile(int id, boolean canPlaceTower, EnumWaypoint waypoint) {
 		this.tileID = id;
 		this.canPlaceTower = canPlaceTower;
-		this.waypoint = waypoint;
 	}
 
 	public static void initialize() {
@@ -77,9 +75,5 @@ public class Tile {
 
 	public void setCanPlaceTower(boolean canPlaceTower) {
 		this.canPlaceTower = canPlaceTower;
-	}
-
-	public EnumWaypoint getWaypoint() {
-		return waypoint;
 	}
 }

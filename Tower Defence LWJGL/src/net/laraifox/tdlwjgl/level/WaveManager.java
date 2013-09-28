@@ -4,40 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.laraifox.tdlwjgl.entity.Entity;
-import net.laraifox.tdlwjgl.enums.EnumDirection;
-import net.laraifox.tdlwjgl.enums.EnumEntityType;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
+import net.laraifox.tdlwjgl.util.GameTimer;
 import net.laraifox.tdlwjgl.util.StringRenderer;
 
 public class WaveManager {
-	private int startX, startY;
-	private EnumDirection initialDir;
 	private List<Wave> waves;
 	private int wavesStarted;
-	private boolean started;
+	private boolean gameStarted;
 	private int waveCount;
-	private int interval;
-	private int ticks;
+	private int previousStartTick;
 
-	public WaveManager(int interval) {
+	public WaveManager() {
 		this.waves = new ArrayList<Wave>();
 		this.wavesStarted = 0;
-		this.started = false;
-		this.interval = interval;
-		this.ticks = 0;
+		this.gameStarted = false;
+		this.previousStartTick = 0;
 	}
 
-	public void setStartingLocation(int x, int y) {
-		this.startX = x;
-		this.startY = y;
-	}
-
-	public void setStartingDirection(EnumDirection direction) {
-		this.initialDir = direction;
-	}
-
-	public void addWave(EnumEntityType entityType, int length, int spawnrate) {
-		waves.add(new Wave(entityType, startX, startY, initialDir, length, spawnrate));
+	public void addWave(int type, int length, int delay, int spawnpoint, int spawnrate) {
+		waves.add(new Wave(type, length, delay, spawnpoint, spawnrate));
 	}
 
 	public int getWaveCount() {
@@ -56,51 +42,50 @@ public class WaveManager {
 		return waves.get(i).getEntityAt(j);
 	}
 
-	public boolean isStarted() {
-		return started;
+	public boolean isGameStarted() {
+		return gameStarted;
 	}
 
 	public void start() {
-		started = true;
+		gameStarted = true;
 	}
 
 	public boolean isFinished() {
-		return (started && wavesStarted >= waves.size() && waveCount == 0);
+		return (gameStarted && wavesStarted >= waves.size() && waveCount == 0);
 	}
 
-	public void nextWave() {
-		if (wavesStarted < waves.size()) {
-			wavesStarted++;
-			ticks = 1;
-		}
-	}
-
-	public void update(Level level) {
-		StringRenderer.addString("Wave Manager Status: " + (started ? "Updating.." : "Not Started"), 16, 64, EnumFontSize.Small);
+	public void update(GameTimer gameTimer, Level level) {
+		StringRenderer.addString("Wave Manager Status: " + (gameStarted ? "Updating.." : "Not Started"), 16, 64, EnumFontSize.Small);
 		StringRenderer.addString("Wave: " + wavesStarted + ", " + waves.size(), 16, 80, EnumFontSize.Small);
-		StringRenderer.addString("Time Until Next Wave: " + ((int) ((interval - (ticks % interval)) / 6.0)) / 10.0, 16, 96, EnumFontSize.Small);
 
-		if (started) {
-			if (((ticks % interval) == 0) && (wavesStarted < waves.size())) {
+		if (gameStarted) {
+			if ((wavesStarted < waves.size()) && (gameTimer.getTicks() - previousStartTick >= waves.get(wavesStarted).getDelay())) {
+				previousStartTick = gameTimer.getTicks();
+
 				wavesStarted++;
 			}
 
 			waveCount = 0;
 			for (int i = 0; i < wavesStarted; i++) {
 				if (!waves.get(i).isComplete()) {
-					waves.get(i).update(level);
+					waves.get(i).update(gameTimer, level);
 					waveCount++;
 				}
 			}
+		}
+	}
 
-			ticks++;
+	public void startNextWave(GameTimer gameTimer) {
+		if (wavesStarted < waves.size()) {
+			previousStartTick = gameTimer.getTicks();
+			wavesStarted++;
 		}
 	}
 
 	public void render() {
-		if (started) {
-			for (int i = 0; i < wavesStarted; i++) {
-				waves.get(i).render();
+		if (gameStarted) {
+			for (Wave wave : waves) {
+				wave.render();
 			}
 		}
 	}

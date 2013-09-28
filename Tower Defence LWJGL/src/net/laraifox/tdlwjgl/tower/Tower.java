@@ -15,8 +15,8 @@ public abstract class Tower {
 	private EnumTowerType towerType;
 	private int tiledX, tiledY;
 	private int baseDisplayListID, turretDisplayListID;
-
 	private Vector2 position;
+	private Vector2 center;
 	private float theta;
 
 	private int firingRate;
@@ -35,6 +35,7 @@ public abstract class Tower {
 		this.turretDisplayListID = turretDisplayListID;
 
 		this.position = new Vector2(tiledX * Tile.getTileSize(), tiledY * Tile.getTileSize());
+		this.center = new Vector2(position).add(new Vector2(getWidth(), getHeight()).scale(0.5));
 		this.theta = -90;
 
 		this.firingRate = towerType.getBaseFiringRate();
@@ -108,7 +109,8 @@ public abstract class Tower {
 	}
 
 	public void update(GameTimer gameTime, WaveManager waveManager) {
-		if ((targetWave < 0 || targetEntity < 0) || ((int) position.distanceTo(waveManager.getEntityAt(targetWave, targetEntity).position) > firingRadius) || !waveManager.getEntityAt(targetWave, targetEntity).alive) {
+		if ((targetWave < 0 || targetEntity < 0) || ((int) position.distanceTo(waveManager.getEntityAt(targetWave, targetEntity).getPosition()) > firingRadius)
+				|| !waveManager.getEntityAt(targetWave, targetEntity).isAlive()) {
 			int nextEntity = -1;
 			int nextWave = -1;
 			int nextDistance = -1;
@@ -117,8 +119,8 @@ public abstract class Tower {
 				Wave w = waveManager.getWaveAt(i);
 				for (int j = 0; j < w.getLength(); j++) {
 					Entity e = w.getEntityAt(j);
-					int distance = (int) position.distanceTo(e.position);
-					if ((e.alive) && (distance <= firingRadius) && (distance < nextDistance || nextEntity < 0 || nextWave < 0)) {
+					int distance = (int) position.distanceTo(e.getPosition());
+					if ((e.isAlive()) && (distance <= firingRadius) && (distance < nextDistance || nextEntity < 0 || nextWave < 0)) {
 						nextWave = i;
 						nextEntity = j;
 						nextDistance = distance;
@@ -131,8 +133,8 @@ public abstract class Tower {
 		}
 
 		if (targetWave >= 0 && targetEntity >= 0) {
-			double dx = waveManager.getEntityAt(targetWave, targetEntity).position.getX() - position.getX();
-			double dy = waveManager.getEntityAt(targetWave, targetEntity).position.getY() - position.getY();
+			double dx = waveManager.getEntityAt(targetWave, targetEntity).getPosition().getX() - position.getX();
+			double dy = waveManager.getEntityAt(targetWave, targetEntity).getPosition().getY() - position.getY();
 			theta = (float) Math.toDegrees(Math.atan2(dy, dx));
 		}
 	}
@@ -179,8 +181,16 @@ public abstract class Tower {
 		GL11.glPopMatrix();
 	}
 
+	public EnumTowerType getTowerType() {
+		return towerType;
+	}
+
 	public Vector2 getPosition() {
 		return position;
+	}
+
+	public Vector2 getCenter() {
+		return center;
 	}
 
 	public int getTileX() {
@@ -217,9 +227,5 @@ public abstract class Tower {
 
 	public int getTargetWave() {
 		return targetWave;
-	}
-
-	public EnumTowerType getTowerType() {
-		return towerType;
 	}
 }
