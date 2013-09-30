@@ -43,6 +43,7 @@ public class Level {
 		this.towers = new ArrayList<Tower>();
 		this.selectedTowerType = EnumTowerType.None;
 		this.waveManager = new WaveManager();
+		this.waypointLists = new ArrayList<WaypointList>();
 	}
 
 	public Tile getTileAt(int i) {

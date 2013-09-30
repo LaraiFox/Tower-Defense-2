@@ -3,6 +3,8 @@ package net.laraifox.tdlwjgl.level;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -137,5 +139,76 @@ public class LevelFormatter {
 		public void setWaypointData(List<WaypointList> waypointLists) {
 			this.waypointLists = waypointLists;
 		}
+	}
+
+	public static void formatAndSave(String fileName, String title, String[] comments, Tile[] tiles, int width, int height, WaveManager waveManager, List<WaypointList> waypointLists) throws IOException {
+		FileWriter writer = new FileWriter(new File(fileName));
+
+		String newline = System.getProperty("line.separator");
+		String newblock = newline + newline + newline + newline;
+
+		writer.append("");
+		writer.append("//--------------------------------------------------------------------------------------------//" + newline);
+		writer.append("//                - " + title + " - " + new String("                                           ").substring(0, 43 - title.length()) + "//" + newline);
+
+		// Add comment support here!
+
+		writer.append("//--------------------------------------------------------------------------------------------//" + newblock);
+
+		writer.append("// Level tile data encoded using a two digit hexadecimal number per tile.");
+		writer.append("#TileData {" + newline);
+		for (int j = height - 1; j >= 0; j--) {
+			writer.append("   ");
+			for (int i = 0; i < width; i++) {
+				String tileID = Integer.toHexString(tiles[i + j * width].getTileID());
+				if (tileID.length() < 2)
+					writer.append("0");
+				writer.append(tileID + " ");
+			}
+			writer.append(newline);
+		}
+		writer.append("}" + newblock);
+
+		writer.append("// List of waypoint location lists for entities using the format [ x:y:direction ]." + newline);
+		writer.append("// X and Y positions start at 00:00 being the bottom left corner. Waypoint position data is encoded using a decimal number." + newline);
+		writer.append("// Direction turns clockwise starting at 0 facing right. A direction of 4 is used to show the end location." + newline);
+		writer.append("#WaypointData {" + newline);
+		for (int j = 0; j < waypointLists.size(); j--) {
+			writer.append("   ");
+			for (int i = 0; i < waypointLists.get(j).getLength(); i++) {
+				Waypoint waypoint = waypointLists.get(j).getWaypoint(i);
+				String x = (waypoint.getX() < 10 ? " " : "") + Integer.toString(waypoint.getX());
+				String y = (waypoint.getY() < 10 ? " " : "") + ":" + Integer.toString(waypoint.getY());
+				String direction = ":" + Integer.toString((waypoint.getDirection().ordinal() == 0 ? 4 : waypoint.getDirection().ordinal() - 1));
+				writer.append(x + y + direction + " ");
+			}
+			writer.append(newline);
+		}
+		writer.append("}" + newblock);
+
+		writer.append("// List of entity waves for the level using the format [ type:length:delay:spawnpoint(:spawnrate) ]." + newline);
+		writer.append("// Entity type is a value representing the entity's ID. Entity type data is encoded using a hexadecimal number." + newline);
+		writer.append("// Wave length indicates the number of entities to spawn before the wave ends using a decimal number." + newline);
+		writer.append("// Delay represents the time to wait before starting the wave in seconds using a decimal number." + newline);
+		writer.append("// Spawnpoint is only used when there are more that one spawnpoint available." + newline);
+		writer.append("// Spawnrate is the amount of time in deciseconds between entity spawns. (+1 decisecond is added on automatically)" + newline);
+		writer.append("#EntityData {" + newline);
+		writer.append("   ");
+		for (int i = 0; i < waveManager.getWaveCount(); i++) {
+			Wave wave = waveManager.getWaveAt(i);
+			String type = (wave.getEntityID() < 16 ? "0" : "") + Integer.toHexString(wave.getEntityID());
+			String length = (wave.getLength() < 10 ? "0" : "") + ":" + Integer.toString(wave.getLength());
+			String delay = (wave.getDelay() < 10 ? " " : "") + ":" + Integer.toString(wave.getDelay());
+			String spawnpoint = ":" + Integer.toString(wave.getSpawnpoint());
+			String spawnrate = (wave.getSpawnpoint() == 60 ? "" : ":" + Integer.toString(wave.getSpawnpoint()));
+			writer.append(type + length + delay + spawnpoint + spawnrate + " ");
+		}
+		writer.append(newline);
+		writer.append("}" + newblock);
+
+		writer.append("//--------------------------------------------------------------------------------------------//" + newline);
+		writer.append("//      - End Of Level Data File -                                                  //" + newline);
+		writer.append("//--------------------------------------------------------------------------------------------//");
+		writer.close();
 	}
 }

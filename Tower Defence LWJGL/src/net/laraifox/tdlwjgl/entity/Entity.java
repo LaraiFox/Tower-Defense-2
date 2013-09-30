@@ -34,7 +34,6 @@ public abstract class Entity {
 	private static final int ENTITY_SIZE = 32;
 	private static int[] displayListIDs;
 
-	private EnumEntityType entityType;
 	private int entityID;
 	private int health;
 	private int reward;
@@ -50,7 +49,6 @@ public abstract class Entity {
 	private int waypointIndex;
 
 	public Entity(EnumEntityType entityType) {
-		this.entityType = entityType;
 		this.entityID = entityType.getEntityID();
 		this.health = entityType.getHealth();
 		this.reward = entityType.getReward();
@@ -113,8 +111,7 @@ public abstract class Entity {
 			return;
 		}
 
-		if ((getPosition().getX() % Tile.getTileSize() > -speed) && (getPosition().getX() % Tile.getTileSize() < speed)
-				&& (getPosition().getY() % Tile.getTileSize() > -speed) && (getPosition().getY() % Tile.getTileSize() < speed)) {
+		if ((getPosition().getX() % Tile.getTileSize() > -speed) && (getPosition().getX() % Tile.getTileSize() < speed) && (getPosition().getY() % Tile.getTileSize() > -speed) && (getPosition().getY() % Tile.getTileSize() < speed)) {
 			int x = (int) (getPosition().getX() / Tile.getTileSize());
 			int y = (int) (getPosition().getY() / Tile.getTileSize());
 

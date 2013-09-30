@@ -9,6 +9,7 @@ import net.laraifox.tdlwjgl.util.GameTimer;
 
 public class Wave {
 	private Entity[] entities;
+	private int entityID;
 	private int length;
 	private int delay;
 	private int spawnpoint;
@@ -41,6 +42,7 @@ public class Wave {
 			break;
 		}
 
+		this.entityID = type;
 		this.length = length;
 		this.delay = delay * 60;
 		this.spawnpoint = spawnpoint;
@@ -101,5 +103,17 @@ public class Wave {
 
 	public int getDelay() {
 		return delay;
+	}
+
+	public int getEntityID() {
+		return entityID;
+	}
+
+	public int getSpawnpoint() {
+		return spawnpoint;
+	}
+
+	public int getSpawnrate() {
+		return spawnrate;
 	}
 }

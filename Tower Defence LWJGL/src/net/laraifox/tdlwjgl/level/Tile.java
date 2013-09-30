@@ -69,6 +69,10 @@ public class Tile {
 		return TILE_SIZE;
 	}
 
+	public int getTileID() {
+		return tileID;
+	}
+
 	public boolean canPlaceTower() {
 		return canPlaceTower;
 	}
