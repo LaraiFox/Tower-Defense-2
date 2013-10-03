@@ -27,9 +27,9 @@ public class GuiMultiPlayerSetup extends Gui {
 	}
 
 	protected void initializeGuiElements() {
-		this.back = new GuiButton(50, 50, 250, 50, 0.0f, "Back");
-		this.information = new GuiLabel(0, (int) ((height / 10) * 7.5f), width, 50, 0.0f, "Sorry, this feature is currently unavailable.", EnumFontSize.Medium);
-		this.request = new GuiLabel(0, (height / 10) * 7, width, 50, 0.0f, "Please return to the title screen.", EnumFontSize.Medium);
+		this.back = new GuiButton(50, 50, 250, 50, "Back");
+		this.information = new GuiLabel(0, (int) ((height / 10) * 7.5f), width, 50, "Sorry, this feature is currently unavailable.", EnumFontSize.Medium);
+		this.request = new GuiLabel(0, (height / 10) * 7, width, 50, "Please return to the title screen.", EnumFontSize.Medium);
 	}
 
 	public void update(MenuManager manager) {
@@ -50,7 +50,7 @@ public class GuiMultiPlayerSetup extends Gui {
 		glColor3f(0.0f, 0.0f, 0.0f);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		super.render();
-		glColor3f(1.0f,  1.0f, 1.0f);
+		glColor3f(1.0f, 1.0f, 1.0f);
 
 		back.render();
 		information.render();

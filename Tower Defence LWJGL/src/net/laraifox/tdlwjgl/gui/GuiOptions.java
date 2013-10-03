@@ -37,10 +37,10 @@ public class GuiOptions extends Gui {
 	}
 
 	protected void initializeGuiElements() {
-		this.save = new GuiButton(width - 300, 50, 250, 50, 0.0f, "Save");
-		this.back = new GuiButton(50, 50, 250, 50, 0.0f, "Back");
-		this.toggleCursor = new GuiButton((width - 350) / 2, height - 200, 350, 50, 0.0f, "Toggle Cursor (on)");
-		this.toggleFPS = new GuiButton((width - 350) / 2, height - 260, 350, 50, 0.0f, "Show Framerate");
+		this.save = new GuiButton(width - 300, 50, 250, 50, "Save");
+		this.back = new GuiButton(50, 50, 250, 50, "Back");
+		this.toggleCursor = new GuiButton((width - 350) / 2, height - 200, 350, 50, "Toggle Cursor (on)");
+		this.toggleFPS = new GuiButton((width - 350) / 2, height - 260, 350, 50, "Show Framerate");
 	}
 
 	public void update(TowerDefenseGame game, MenuManager manager) {

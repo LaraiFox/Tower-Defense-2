@@ -40,10 +40,10 @@ public class GuiQuit extends Gui {
 	}
 
 	protected void initializeGuiElements() {
-		this.yesButton = new GuiButton((width - 250) / 2, (height / 10) * 5, 250, 50, 0.0f, "Yes");
-		this.noButton = new GuiButton((width - 250) / 2, (height / 10) * 4, 250, 50, 0.0f, "No");
+		this.yesButton = new GuiButton((width - 250) / 2, (height / 10) * 5, 250, 50, "Yes");
+		this.noButton = new GuiButton((width - 250) / 2, (height / 10) * 4, 250, 50, "No");
 
-		this.questionLabel = new GuiLabel(0, (height / 10) * 6, width, 50, 0.0f, "Are You Sure You Want To Quit?", EnumFontSize.Medium);
+		this.questionLabel = new GuiLabel(0, (height / 10) * 6, width, 50, "Are You Sure You Want To Quit?", EnumFontSize.Medium);
 	}
 
 	public void update(TowerDefenseGame game, MenuManager manager) {
@@ -55,7 +55,7 @@ public class GuiQuit extends Gui {
 		} else if (noButton.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.Title);
 		}
-		
+
 		if (yesButton.getState() == EnumButtonState.Hovered) {
 			Rectangle bounds = yesButton.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);

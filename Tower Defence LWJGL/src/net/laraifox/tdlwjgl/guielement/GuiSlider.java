@@ -34,8 +34,8 @@ public class GuiSlider extends GuiElement {
 	private Texture sliderBarTexture;
 	private float value;
 
-	protected GuiSlider(int x, int y, int width, int height, float theta, float value) {
-		super("res/gui/slider_background.png", x, y, width, height, theta);
+	protected GuiSlider(int x, int y, int width, int height, float value) {
+		super("res/gui/slider_background.png", x, y, width, height);
 
 		try {
 			this.sliderBarTexture = TextureLoader.getTexture(new FileInputStream(new File("res/gui/slider_bar.png")));

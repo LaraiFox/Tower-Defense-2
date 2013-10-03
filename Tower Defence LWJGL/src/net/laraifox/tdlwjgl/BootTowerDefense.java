@@ -13,6 +13,9 @@ import net.laraifox.tdlwjgl.main.Settings;
  * 
  */
 public class BootTowerDefense {
+	private static final int DEFAULT_WINDOW_WIDTH = 1600;
+	private static final int DEFAULT_WINDOW_HEIGHT = 900;
+	
 	public static void main(String[] args) throws Exception {
 		String operatingSystem = System.getProperty("os.name").toLowerCase();
 
@@ -42,7 +45,8 @@ public class BootTowerDefense {
 			e.printStackTrace();
 		}
 
-		TowerDefenseGame game = new TowerDefenseGame();
+		TowerDefenseGame game = new TowerDefenseGame(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+		game.setOrtho(0, DEFAULT_WINDOW_WIDTH, 0, DEFAULT_WINDOW_HEIGHT, -1, 1);
 		game.intitialize();
 		game.start();
 

@@ -49,15 +49,15 @@ public class GuiTitle extends Gui {
 	}
 
 	protected void initializeGuiElements() {
-		this.singlePlayer = new GuiButton((width - 250) / 2, (int) ((height / 10) * 5.5), 250, 50, 0.0f, "Single Player");
-		this.multiPlayer = new GuiButton((width - 250) / 2, (int) ((height / 10) * 4.5), 250, 50, 0.0f, "Multi Player");
-		this.levelEditor = new GuiButton((width - 250) / 2, (int) ((height / 10) * 3.5), 250, 50, 0.0f, "Level Editor");
-		this.options = new GuiButton((width - 250) / 2, (int) ((height / 10) * 2.5), 250, 50, 0.0f, "Options");
-		this.credits = new GuiButton((width - 250) / 2, (int) ((height / 10) * 1.5), 250, 50, 0.0f, "Credits");
-		this.quit = new GuiButton((width - 250) / 2, (int) ((height / 10) * 0.5), 250, 50, 0.0f, "Quit");
+		this.singlePlayer = new GuiButton((width - 250) / 2, (int) ((height / 10) * 5.5), 250, 50, "Single Player");
+		this.multiPlayer = new GuiButton((width - 250) / 2, (int) ((height / 10) * 4.5), 250, 50, "Multi Player");
+		this.levelEditor = new GuiButton((width - 250) / 2, (int) ((height / 10) * 3.5), 250, 50, "Level Editor");
+		this.options = new GuiButton((width - 250) / 2, (int) ((height / 10) * 2.5), 250, 50, "Options");
+		this.credits = new GuiButton((width - 250) / 2, (int) ((height / 10) * 1.5), 250, 50, "Credits");
+		this.quit = new GuiButton((width - 250) / 2, (int) ((height / 10) * 0.5), 250, 50, "Quit");
 
-		this.title = new GuiLabel((width - 250) / 2, (int) ((height / 10) * 8), 250, 50, 0.0f, "Tower Defense", EnumFontSize.Large);
-		this.splash = new GuiLabel((width - 250) / 2, (int) ((height / 10) * 7.5), 250, 50, 25.0f, getSplash(), EnumFontSize.Small);
+		this.title = new GuiLabel((width - 250) / 2, (int) ((height / 10) * 8), 250, 50, "Tower Defense", EnumFontSize.Large);
+		this.splash = new GuiLabel((width - 250) / 2, (int) ((height / 10) * 7.5), 250, 50, getSplash(), EnumFontSize.Small);
 	}
 
 	private String getSplash() {
@@ -75,20 +75,20 @@ public class GuiTitle extends Gui {
 
 			if (line.length() > 0) {
 				char initialCharacter = line.charAt(0);
-				if (initialCharacter == '\n' || initialCharacter == '/' || initialCharacter == ' ') 
+				if (initialCharacter == '\n' || initialCharacter == '/' || initialCharacter == ' ')
 					continue;
-				
+
 				builder.append(line + "\n");
 			}
 		}
 
 		String[] splashList = builder.toString().split("\n");
 		String splash = new String();
-		
+
 		if (splashList.length > 0) {
 			splash = splashList[random.nextInt(splashList.length)];
 		}
-		
+
 		scanner.close();
 		return splash;
 	}
@@ -100,7 +100,7 @@ public class GuiTitle extends Gui {
 		options.update();
 		credits.update();
 		quit.update();
-		
+
 		if (singlePlayer.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.SinglePlayerSetup);
 		} else if (multiPlayer.getState() == EnumButtonState.Clicked) {
@@ -114,7 +114,7 @@ public class GuiTitle extends Gui {
 		} else if (quit.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.Quit);
 		}
-		
+
 		if (singlePlayer.getState() == EnumButtonState.Hovered) {
 			Rectangle bounds = singlePlayer.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);

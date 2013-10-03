@@ -80,6 +80,10 @@ public class Settings {
 		saveSettings();
 	}
 
+	public static String getProgramDirectory() {
+		return programDirectory;
+	}
+
 	public static void setProgramDirectory(String directory) {
 		programDirectory = directory;
 	}

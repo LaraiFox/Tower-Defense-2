@@ -89,7 +89,7 @@ public class MenuManager {
 			multiPlayerSetup.update(this);
 			break;
 		case EditorSetup:
-			levelEditorSetup.update(this);
+			levelEditorSetup.update(game, this);
 			break;
 		case Options:
 			options.update(game, this);
@@ -110,7 +110,8 @@ public class MenuManager {
 		updatePreviousInput();
 	}
 
-	private void updatePreviousInput() {}
+	private void updatePreviousInput() {
+	}
 
 	public void render() {
 		switch (menuState) {

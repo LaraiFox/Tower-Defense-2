@@ -57,7 +57,7 @@ public abstract class Entity {
 
 		this.position = new Vector2(0, 0);
 		this.center = new Vector2(ENTITY_SIZE / 2, ENTITY_SIZE / 2);
-		this.velocity = Vector.scale(direction.getVector(), speed);
+		this.velocity = Vector2.Zero();
 		this.alive = false;
 
 		this.direction = EnumDirection.None;

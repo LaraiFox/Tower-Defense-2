@@ -37,8 +37,8 @@ public class GuiSinglePlayerSetup extends Gui {
 	}
 
 	protected void initializeGuiElements() {
-		this.start = new GuiButton(width - 300, 50, 250, 50, 0.0f, "Start Game");
-		this.back = new GuiButton(50, 50, 250, 50, 0.0f, "Back");
+		this.start = new GuiButton(width - 300, 50, 250, 50, "Start Game");
+		this.back = new GuiButton(50, 50, 250, 50, "Back");
 	}
 
 	public void update(TowerDefenseGame game, MenuManager manager) {
@@ -53,7 +53,7 @@ public class GuiSinglePlayerSetup extends Gui {
 		} else if (back.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.Title);
 		}
-		
+
 		if (start.getState() == EnumButtonState.Hovered) {
 			Rectangle bounds = start.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);

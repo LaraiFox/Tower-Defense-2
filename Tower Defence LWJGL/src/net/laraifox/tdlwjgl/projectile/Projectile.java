@@ -78,7 +78,7 @@ public abstract class Projectile {
 
 	public void update(Entity entity) {
 		Vector2 vectorToEnity = new Vector2(entity.getPosition());
-		vectorToEnity.add(entity.getCenter().scale(0.5));
+		vectorToEnity.add(entity.getCenter());
 		vectorToEnity.subtract(position);
 		theta = (float) Math.atan2(vectorToEnity.getY(), vectorToEnity.getX());
 

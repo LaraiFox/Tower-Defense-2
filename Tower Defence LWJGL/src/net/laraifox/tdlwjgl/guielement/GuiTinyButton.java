@@ -19,8 +19,8 @@ public class GuiTinyButton extends GuiElement {
 
 	private String text;
 
-	public GuiTinyButton(int x, int y, int width, int height, float theta, String text) {
-		super("res/gui/button.png", x, y, width, height, theta);
+	public GuiTinyButton(int x, int y, int width, int height, String text) {
+		super("res/gui/button.png", x, y, width, height);
 
 		this.text = text;
 	}
@@ -82,8 +82,7 @@ public class GuiTinyButton extends GuiElement {
 
 		super.render();
 
-		StringRenderer.render(text, bounds.x + (bounds.width - text.length() * fontsize.getWidth()) / 2, bounds.y + (bounds.height - fontsize.getHeight()) / 2,
-				fontsize);
+		StringRenderer.render(text, bounds.x + (bounds.width - text.length() * fontsize.getWidth()) / 2, bounds.y + (bounds.height - fontsize.getHeight()) / 2, fontsize);
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 	}

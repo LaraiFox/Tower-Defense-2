@@ -38,19 +38,19 @@ public class GuiCredits extends Gui {
 	}
 
 	protected void initializeGuiElements() {
-		this.back = new GuiButton((width - 250) / 2, 50, 250, 50, 0.0f, "Back");
-		this.title = new GuiLabel(0, (int) ((height / 10) * 6.5f), width, 50, 0.0f, "Tower Defense", EnumFontSize.Large);
-		this.action = new GuiLabel(0, (int) ((height / 10) * 5.5f), width, 50, 0.0f, "created by", EnumFontSize.Medium);
-		this.name = new GuiLabel(0, (height / 10) * 5, width, 50, 0.0f, "Larai Fox", EnumFontSize.Medium);
+		this.back = new GuiButton((width - 250) / 2, 50, 250, 50, "Back");
+		this.title = new GuiLabel(0, (int) ((height / 10) * 6.5f), width, 50, "Tower Defense", EnumFontSize.Large);
+		this.action = new GuiLabel(0, (int) ((height / 10) * 5.5f), width, 50, "created by", EnumFontSize.Medium);
+		this.name = new GuiLabel(0, (height / 10) * 5, width, 50, "Larai Fox", EnumFontSize.Medium);
 	}
 
 	public void update(MenuManager manager) {
 		back.update();
-		
+
 		if (back.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.Title);
 		}
-		
+
 		if (back.getState() == EnumButtonState.Hovered) {
 			Rectangle bounds = back.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);

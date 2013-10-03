@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import net.laraifox.tdlwjgl.enums.EnumWaypoint;
+import net.laraifox.tdlwjgl.main.Settings;
 
 public class LevelFormatter {
 	public static Level loadLevel(String levelFileName) throws FileNotFoundException {
@@ -47,7 +47,7 @@ public class LevelFormatter {
 					continue;
 
 				int tileID = Integer.parseInt(splitLine[i], 16);
-				tileList.add(new Tile(tileID, true, EnumWaypoint.None));
+				tileList.add(new Tile(tileID));
 				isValidLine = true;
 			}
 			line = getNextLine(scanner);
@@ -142,20 +142,23 @@ public class LevelFormatter {
 	}
 
 	public static void formatAndSave(String fileName, String title, String[] comments, Tile[] tiles, int width, int height, WaveManager waveManager, List<WaypointList> waypointLists) throws IOException {
-		FileWriter writer = new FileWriter(new File(fileName));
+		File file = new File(Settings.getProgramDirectory() + "/levels/" + fileName + ".txt");
+		if (!file.exists())
+			file.createNewFile();
+		FileWriter writer = new FileWriter(file);
 
 		String newline = System.getProperty("line.separator");
 		String newblock = newline + newline + newline + newline;
 
 		writer.append("");
 		writer.append("//--------------------------------------------------------------------------------------------//" + newline);
-		writer.append("//                - " + title + " - " + new String("                                           ").substring(0, 43 - title.length()) + "//" + newline);
+		writer.append("//                - " + title + " - " + new String("                                                                ").substring(0, 71 - title.length()) + "//" + newline);
 
 		// Add comment support here!
 
 		writer.append("//--------------------------------------------------------------------------------------------//" + newblock);
 
-		writer.append("// Level tile data encoded using a two digit hexadecimal number per tile.");
+		writer.append("// Level tile data encoded using a two digit hexadecimal number per tile." + newline);
 		writer.append("#TileData {" + newline);
 		for (int j = height - 1; j >= 0; j--) {
 			writer.append("   ");
@@ -193,21 +196,23 @@ public class LevelFormatter {
 		writer.append("// Spawnpoint is only used when there are more that one spawnpoint available." + newline);
 		writer.append("// Spawnrate is the amount of time in deciseconds between entity spawns. (+1 decisecond is added on automatically)" + newline);
 		writer.append("#EntityData {" + newline);
-		writer.append("   ");
-		for (int i = 0; i < waveManager.getWaveCount(); i++) {
-			Wave wave = waveManager.getWaveAt(i);
-			String type = (wave.getEntityID() < 16 ? "0" : "") + Integer.toHexString(wave.getEntityID());
-			String length = (wave.getLength() < 10 ? "0" : "") + ":" + Integer.toString(wave.getLength());
-			String delay = (wave.getDelay() < 10 ? " " : "") + ":" + Integer.toString(wave.getDelay());
-			String spawnpoint = ":" + Integer.toString(wave.getSpawnpoint());
-			String spawnrate = (wave.getSpawnpoint() == 60 ? "" : ":" + Integer.toString(wave.getSpawnpoint()));
-			writer.append(type + length + delay + spawnpoint + spawnrate + " ");
+		if (waveManager.getWaveCount() > 0) {
+			writer.append("   ");
+			for (int i = 0; i < waveManager.getWaveCount(); i++) {
+				Wave wave = waveManager.getWaveAt(i);
+				String type = (wave.getEntityID() < 16 ? "0" : "") + Integer.toHexString(wave.getEntityID());
+				String length = (wave.getLength() < 10 ? "0" : "") + ":" + Integer.toString(wave.getLength());
+				String delay = (wave.getDelay() < 10 ? " " : "") + ":" + Integer.toString(wave.getDelay());
+				String spawnpoint = ":" + Integer.toString(wave.getSpawnpoint());
+				String spawnrate = (wave.getSpawnpoint() == 60 ? "" : ":" + Integer.toString(wave.getSpawnpoint()));
+				writer.append(type + length + delay + spawnpoint + spawnrate + " ");
+			}
+			writer.append(newline);
 		}
-		writer.append(newline);
 		writer.append("}" + newblock);
 
 		writer.append("//--------------------------------------------------------------------------------------------//" + newline);
-		writer.append("//      - End Of Level Data File -                                                  //" + newline);
+		writer.append("//      - End Of Level Data File -                                                            //" + newline);
 		writer.append("//--------------------------------------------------------------------------------------------//");
 		writer.close();
 	}
