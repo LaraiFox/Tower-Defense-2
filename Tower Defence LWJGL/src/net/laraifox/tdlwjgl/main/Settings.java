@@ -21,13 +21,15 @@ import net.laraifox.tdlwjgl.enums.EnumWindowResolution;
  * 
  */
 public class Settings {
-	private static final String PROGRAM_FOLDER = "/Tower Defense";
-	private static final String FILE_NAME = "/setting.cfg";
+	private static final String PROGRAM_FOLDER_NAME = "Tower Defense";
+	private static final String SETTINGS_FILE_NAME = "setting.cfg";
 
 	private static String programDirectory = "";
 
-	public static EnumWindowResolution resolution;
-	public static EnumFramerateLimit framerateLimit;
+	private static float mouseSX, mouseSY;
+
+	private static EnumWindowResolution resolution;
+	private static EnumFramerateLimit framerateLimit;
 
 	public static void loadSettings() throws Exception {
 		if (programDirectory != null) {
@@ -40,7 +42,7 @@ public class Settings {
 			if (!programFolder.exists())
 				programFolder.mkdir();
 
-			File settingsFile = new File(programDirectory + FILE_NAME);
+			File settingsFile = new File(programDirectory + SETTINGS_FILE_NAME);
 			if (!settingsFile.exists()) {
 				settingsFile.createNewFile();
 				createDefaultSettingsFile();
@@ -57,7 +59,7 @@ public class Settings {
 			 * using the appropriate format.
 			 */
 
-			File settingsFile = new File(programDirectory + FILE_NAME);
+			File settingsFile = new File(programDirectory + SETTINGS_FILE_NAME);
 
 			String newLine = System.getProperty("line.separator");
 			BufferedWriter writer = new BufferedWriter(new FileWriter(settingsFile));
@@ -80,15 +82,50 @@ public class Settings {
 		saveSettings();
 	}
 
-	public static void setProgramDirectory(String directory) {
-		programDirectory = directory;
+	public static void setProgramDirectory(String programDirectory) {
+		Settings.programDirectory = programDirectory;
+		File programDirectoryFolder = new File(programDirectory);
+		if (!programDirectoryFolder.exists())
+			programDirectoryFolder.mkdirs();
 	}
 
-	public static String getProgramFolder() {
-		return PROGRAM_FOLDER;
+	public static String getProgramFolderName() {
+		return PROGRAM_FOLDER_NAME;
 	}
 
-	public static String getFileName() {
-		return FILE_NAME;
+	public static String getSettingsFileName() {
+		return SETTINGS_FILE_NAME;
+	}
+
+	public static float getMouseSX() {
+		return mouseSX;
+	}
+
+	public static void setMouseSX(float mouseSX) {
+		Settings.mouseSX = mouseSX;
+	}
+
+	public static float getMouseSY() {
+		return mouseSY;
+	}
+
+	public static void setMouseSY(float mouseSY) {
+		Settings.mouseSY = mouseSY;
+	}
+
+	public static EnumWindowResolution getResolution() {
+		return resolution;
+	}
+
+	public static void setResolution(EnumWindowResolution resolution) {
+		Settings.resolution = resolution;
+	}
+
+	public static EnumFramerateLimit getFramerateLimit() {
+		return framerateLimit;
+	}
+
+	public static void setFramerateLimit(EnumFramerateLimit framerateLimit) {
+		Settings.framerateLimit = framerateLimit;
 	}
 }

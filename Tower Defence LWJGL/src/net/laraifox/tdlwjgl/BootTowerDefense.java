@@ -17,21 +17,21 @@ public class BootTowerDefense {
 		String operatingSystem = System.getProperty("os.name").toLowerCase();
 
 		String username = System.getProperty("user.name");
-		String fileLocation = Settings.getProgramFolder();
+		String programFolder = Settings.getProgramFolderName();
 
 		if (operatingSystem.contains("win")) {
 			System.setProperty("org.lwjgl.librarypath", new File("res/natives/windows").getAbsolutePath());
 
-			Settings.setProgramDirectory("/Users/" + username + "/AppData/Roaming" + fileLocation);
+			Settings.setProgramDirectory("/Users/" + username + "/AppData/Roaming/" + programFolder);
 		} else if (operatingSystem.contains("mac")) {
 			System.setProperty("org.lwjgl.librarypath", new File("res/natives/macosx").getAbsolutePath());
 			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Tower Defense");
 
-			Settings.setProgramDirectory("/Users/" + username + "/Library" + fileLocation);
+			Settings.setProgramDirectory("/Users/" + username + "/Library/" + programFolder);
 		} else if (operatingSystem.contains("linux")) {
 			System.setProperty("org.lwjgl.librarypath", new File("res/natives/linux").getAbsolutePath());
 
-			Settings.setProgramDirectory("/home/" + username + fileLocation);
+			Settings.setProgramDirectory("/home/" + username + programFolder);
 		} else {
 			throw new Exception("Your Operating System (" + operatingSystem + ") is unrecognised or unsupported");
 		}
