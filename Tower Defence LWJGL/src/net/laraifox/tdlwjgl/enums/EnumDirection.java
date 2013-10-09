@@ -11,7 +11,7 @@ public enum EnumDirection {
 
 	private Vector2 vector;
 
-	EnumDirection(Vector2 vector) {
+	private EnumDirection(Vector2 vector) {
 		this.vector = vector;
 	}
 

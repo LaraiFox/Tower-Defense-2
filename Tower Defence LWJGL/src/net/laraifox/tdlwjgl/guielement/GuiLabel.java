@@ -8,8 +8,8 @@ public class GuiLabel extends GuiElement {
 	private EnumFontSize fontsize;
 	private int textX, textY;
 
-	public GuiLabel(int x, int y, int width, int height, float theta, String text, EnumFontSize fontsize) {
-		super("res/debug/blank.png", x, y, width, height, theta);
+	public GuiLabel(int x, int y, int width, int height, String text, EnumFontSize fontsize) {
+		super("res/debug/blank.png", x, y, width, height);
 
 		this.text = text;
 		this.fontsize = fontsize;
@@ -33,11 +33,10 @@ public class GuiLabel extends GuiElement {
 		textX = bounds.x + ((bounds.width - l * fontsize.getWidth()) / 2);
 		textY = bounds.y + ((bounds.height - fontsize.getHeight()) / 2);
 	}
-	
-	public void update() {	
-		/* 
-		 *  No updating is required for the GuiLabel class.
-		 *  
+
+	public void update() {
+		/*
+		 * No updating is required for the GuiLabel class.
 		 */
 	}
 

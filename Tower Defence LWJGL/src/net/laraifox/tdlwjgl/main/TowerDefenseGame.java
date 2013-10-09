@@ -6,12 +6,14 @@ import net.laraifox.lib.display.OpenGLDisplay;
 import net.laraifox.tdlwjgl.entity.Entity;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.enums.EnumGameState;
+import net.laraifox.tdlwjgl.enums.EnumMenuState;
 import net.laraifox.tdlwjgl.enums.EnumProgramState;
 import net.laraifox.tdlwjgl.level.Tile;
 import net.laraifox.tdlwjgl.projectile.Projectile;
 import net.laraifox.tdlwjgl.tower.TowerBasic;
 import net.laraifox.tdlwjgl.tower.TowerFast;
 import net.laraifox.tdlwjgl.util.GameTimer;
+import net.laraifox.tdlwjgl.util.MouseHandler;
 import net.laraifox.tdlwjgl.util.StringRenderer;
 
 import org.lwjgl.opengl.GL11;
@@ -23,13 +25,14 @@ public class TowerDefenseGame extends OpenGLDisplay {
 
 	private MenuManager menuManager;
 	private GameManager gameManager;
+	private LevelEditor levelEditor;
 
 	private String nextLevelName;
 
 	private boolean showFramerate;
 
-	public TowerDefenseGame() {
-		super("Tower Defense", 1024, 640, false, false, 60, 60);
+	public TowerDefenseGame(int width, int height) {
+		super("Tower Defense", width, height, false, false, 60, 60);
 	}
 
 	protected void initializeResources() {
@@ -53,7 +56,11 @@ public class TowerDefenseGame extends OpenGLDisplay {
 		// e.printStackTrace();
 		// }
 
+		Settings.setMouseSX(1.0f);
+		Settings.setMouseSY(1.0f);
+
 		Entity.initialize();
+		MouseHandler.initialize();
 		Projectile.initialize();
 		StringRenderer.initialize();
 		Tile.initialize();
@@ -68,6 +75,7 @@ public class TowerDefenseGame extends OpenGLDisplay {
 
 		this.menuManager = new MenuManager(getWidth(), getHeight(), random);
 		this.gameManager = new GameManager();
+		this.levelEditor = new LevelEditor();
 
 		this.nextLevelName = "prototype_level_1";
 
@@ -79,12 +87,8 @@ public class TowerDefenseGame extends OpenGLDisplay {
 	}
 
 	protected void update(double delta) {
+		MouseHandler.update();
 		gameTimer.update();
-
-		StringRenderer.clear();
-		if (showFramerate) {
-			StringRenderer.addString("FPS: " + getCurrentFPS() + ", (updates: " + getCurrentUPS() + ")", 48, getHeight() - 80, EnumFontSize.Medium);
-		}
 
 		switch (programState) {
 		case Menu:
@@ -98,6 +102,7 @@ public class TowerDefenseGame extends OpenGLDisplay {
 			gameManager.update(this, gameTimer);
 			break;
 		case Editor:
+			levelEditor.update(this);
 			break;
 		case Quit:
 			this.stop();
@@ -111,6 +116,11 @@ public class TowerDefenseGame extends OpenGLDisplay {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glLoadIdentity();
 
+		StringRenderer.clear();
+		if (showFramerate) {
+			StringRenderer.addString("FPS: " + getCurrentFPS() + ", (updates: " + getCurrentUPS() + ")", 48, getHeight() - 80, EnumFontSize.Medium);
+		}
+
 		switch (programState) {
 		case Menu:
 			menuManager.render();
@@ -119,6 +129,7 @@ public class TowerDefenseGame extends OpenGLDisplay {
 			gameManager.render();
 			break;
 		case Editor:
+			levelEditor.render();
 			break;
 		default:
 			break;
@@ -127,8 +138,16 @@ public class TowerDefenseGame extends OpenGLDisplay {
 		StringRenderer.render();
 	}
 
+	public void initializeLevelEditor() {
+		levelEditor.newLevel(0, 24, 17);
+	}
+
 	public void setProgramState(EnumProgramState programState) {
 		this.programState = programState;
+	}
+
+	public void setMenuState(EnumMenuState menuState) {
+		menuManager.setMenuState(menuState);
 	}
 
 	public void setGameState(EnumGameState gameState) {

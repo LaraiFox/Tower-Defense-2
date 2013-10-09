@@ -5,7 +5,7 @@ public enum EnumFontSize {
 
 	private int width, height;
 
-	EnumFontSize(int width, int height) {
+	private EnumFontSize(int width, int height) {
 		this.width = width;
 		this.height = height;
 	}

@@ -8,7 +8,7 @@ import net.laraifox.tdlwjgl.enums.EnumMenuState;
 import net.laraifox.tdlwjgl.gui.GuiCredits;
 import net.laraifox.tdlwjgl.gui.GuiLevelEditorSetup;
 import net.laraifox.tdlwjgl.gui.GuiMultiPlayerSetup;
-import net.laraifox.tdlwjgl.gui.GuiOptions;
+import net.laraifox.tdlwjgl.gui.GuiSettings;
 import net.laraifox.tdlwjgl.gui.GuiQuit;
 import net.laraifox.tdlwjgl.gui.GuiSinglePlayerSetup;
 import net.laraifox.tdlwjgl.gui.GuiTitle;
@@ -22,7 +22,7 @@ public class MenuManager {
 	private GuiSinglePlayerSetup singlePlayerSetup;
 	private GuiMultiPlayerSetup multiPlayerSetup;
 	private GuiLevelEditorSetup levelEditorSetup;
-	private GuiOptions options;
+	private GuiSettings options;
 	private GuiCredits credits;
 	private GuiQuit quit;
 
@@ -54,7 +54,7 @@ public class MenuManager {
 		this.singlePlayerSetup = new GuiSinglePlayerSetup(width, height);
 		this.multiPlayerSetup = new GuiMultiPlayerSetup(width, height);
 		this.levelEditorSetup = new GuiLevelEditorSetup(width, height);
-		this.options = new GuiOptions(width, height);
+		this.options = new GuiSettings(width, height);
 		this.credits = new GuiCredits(width, height);
 		this.quit = new GuiQuit(width, height);
 	}
@@ -74,6 +74,8 @@ public class MenuManager {
 
 	public void setMenuState(EnumMenuState menuState) {
 		this.menuState = menuState;
+		if (menuState == EnumMenuState.Options)
+			options.updateSettings();
 		guiCursor.setVisible(false);
 	}
 
@@ -89,7 +91,7 @@ public class MenuManager {
 			multiPlayerSetup.update(this);
 			break;
 		case EditorSetup:
-			levelEditorSetup.update(this);
+			levelEditorSetup.update(game, this);
 			break;
 		case Options:
 			options.update(game, this);

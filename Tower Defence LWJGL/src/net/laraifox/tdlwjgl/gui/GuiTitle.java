@@ -20,12 +20,12 @@ import net.laraifox.tdlwjgl.guielement.GuiLabel;
 import net.laraifox.tdlwjgl.main.MenuManager;
 
 public class GuiTitle extends Gui {
-	private GuiButton singlePlayer;
-	private GuiButton multiPlayer;
-	private GuiButton levelEditor;
-	private GuiButton options;
-	private GuiButton credits;
-	private GuiButton quit;
+	private GuiButton singlePlayerButton;
+	private GuiButton multiPlayerButton;
+	private GuiButton levelEditorButton;
+	private GuiButton optionsButton;
+	private GuiButton creditsButton;
+	private GuiButton quitButton;
 
 	private GuiLabel title;
 	private GuiLabel splash;
@@ -49,15 +49,15 @@ public class GuiTitle extends Gui {
 	}
 
 	protected void initializeGuiElements() {
-		this.singlePlayer = new GuiButton((width - 250) / 2, (int) ((height / 10) * 5.5), 250, 50, 0.0f, "Single Player");
-		this.multiPlayer = new GuiButton((width - 250) / 2, (int) ((height / 10) * 4.5), 250, 50, 0.0f, "Multi Player");
-		this.levelEditor = new GuiButton((width - 250) / 2, (int) ((height / 10) * 3.5), 250, 50, 0.0f, "Level Editor");
-		this.options = new GuiButton((width - 250) / 2, (int) ((height / 10) * 2.5), 250, 50, 0.0f, "Options");
-		this.credits = new GuiButton((width - 250) / 2, (int) ((height / 10) * 1.5), 250, 50, 0.0f, "Credits");
-		this.quit = new GuiButton((width - 250) / 2, (int) ((height / 10) * 0.5), 250, 50, 0.0f, "Quit");
+		this.singlePlayerButton = new GuiButton((width - 250) / 2, (int) ((height / 10) * 5.5), 250, 50, "Single Player");
+		this.multiPlayerButton = new GuiButton((width - 250) / 2, (int) ((height / 10) * 4.5), 250, 50, "Multi Player");
+		this.levelEditorButton = new GuiButton((width - 250) / 2, (int) ((height / 10) * 3.5), 250, 50, "Level Editor");
+		this.optionsButton = new GuiButton((width - 250) / 2, (int) ((height / 10) * 2.5), 250, 50, "Settings");
+		this.creditsButton = new GuiButton((width - 250) / 2, (int) ((height / 10) * 1.5), 250, 50, "Credits");
+		this.quitButton = new GuiButton((width - 250) / 2, (int) ((height / 10) * 0.5), 250, 50, "Quit");
 
-		this.title = new GuiLabel((width - 250) / 2, (int) ((height / 10) * 8), 250, 50, 0.0f, "Tower Defense", EnumFontSize.Large);
-		this.splash = new GuiLabel((width - 250) / 2, (int) ((height / 10) * 7.5), 250, 50, 25.0f, getSplash(), EnumFontSize.Small);
+		this.title = new GuiLabel((width - 250) / 2, (int) ((height / 10) * 8), 250, 50, "Tower Defense", EnumFontSize.Large);
+		this.splash = new GuiLabel((width - 250) / 2, (int) ((height / 10) * 7.5), 250, 50, getSplash(), EnumFontSize.Small);
 	}
 
 	private String getSplash() {
@@ -75,63 +75,63 @@ public class GuiTitle extends Gui {
 
 			if (line.length() > 0) {
 				char initialCharacter = line.charAt(0);
-				if (initialCharacter == '\n' || initialCharacter == '/' || initialCharacter == ' ') 
+				if (initialCharacter == '\n' || initialCharacter == '/' || initialCharacter == ' ')
 					continue;
-				
+
 				builder.append(line + "\n");
 			}
 		}
 
 		String[] splashList = builder.toString().split("\n");
 		String splash = new String();
-		
+
 		if (splashList.length > 0) {
 			splash = splashList[random.nextInt(splashList.length)];
 		}
-		
+
 		scanner.close();
 		return splash;
 	}
 
 	public void update(MenuManager manager) {
-		singlePlayer.update();
-		multiPlayer.update();
-		levelEditor.update();
-		options.update();
-		credits.update();
-		quit.update();
-		
-		if (singlePlayer.getState() == EnumButtonState.Clicked) {
+		singlePlayerButton.update();
+		multiPlayerButton.update();
+		levelEditorButton.update();
+		optionsButton.update();
+		creditsButton.update();
+		quitButton.update();
+
+		if (singlePlayerButton.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.SinglePlayerSetup);
-		} else if (multiPlayer.getState() == EnumButtonState.Clicked) {
+		} else if (multiPlayerButton.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.MultiPlayerSetup);
-		} else if (levelEditor.getState() == EnumButtonState.Clicked) {
+		} else if (levelEditorButton.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.EditorSetup);
-		} else if (options.getState() == EnumButtonState.Clicked) {
+		} else if (optionsButton.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.Options);
-		} else if (credits.getState() == EnumButtonState.Clicked) {
+		} else if (creditsButton.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.Credits);
-		} else if (quit.getState() == EnumButtonState.Clicked) {
+		} else if (quitButton.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.Quit);
 		}
-		
-		if (singlePlayer.getState() == EnumButtonState.Hovered) {
-			Rectangle bounds = singlePlayer.getBounds();
+
+		if (singlePlayerButton.getState() == EnumButtonState.Hovered) {
+			Rectangle bounds = singlePlayerButton.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);
-		} else if (multiPlayer.getState() == EnumButtonState.Hovered) {
-			Rectangle bounds = multiPlayer.getBounds();
+		} else if (multiPlayerButton.getState() == EnumButtonState.Hovered) {
+			Rectangle bounds = multiPlayerButton.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);
-		} else if (levelEditor.getState() == EnumButtonState.Hovered) {
-			Rectangle bounds = levelEditor.getBounds();
+		} else if (levelEditorButton.getState() == EnumButtonState.Hovered) {
+			Rectangle bounds = levelEditorButton.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);
-		} else if (options.getState() == EnumButtonState.Hovered) {
-			Rectangle bounds = options.getBounds();
+		} else if (optionsButton.getState() == EnumButtonState.Hovered) {
+			Rectangle bounds = optionsButton.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);
-		} else if (credits.getState() == EnumButtonState.Hovered) {
-			Rectangle bounds = credits.getBounds();
+		} else if (creditsButton.getState() == EnumButtonState.Hovered) {
+			Rectangle bounds = creditsButton.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);
-		} else if (quit.getState() == EnumButtonState.Hovered) {
-			Rectangle bounds = quit.getBounds();
+		} else if (quitButton.getState() == EnumButtonState.Hovered) {
+			Rectangle bounds = quitButton.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);
 		}
 	}
@@ -144,12 +144,12 @@ public class GuiTitle extends Gui {
 		title.render();
 		splash.render();
 
-		singlePlayer.render();
-		multiPlayer.render();
-		levelEditor.render();
-		options.render();
-		credits.render();
-		quit.render();
+		singlePlayerButton.render();
+		multiPlayerButton.render();
+		levelEditorButton.render();
+		optionsButton.render();
+		creditsButton.render();
+		quitButton.render();
 
 		glPopMatrix();
 	}

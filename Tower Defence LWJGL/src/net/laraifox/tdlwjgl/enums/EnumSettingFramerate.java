@@ -1,6 +1,6 @@
 package net.laraifox.tdlwjgl.enums;
 
-public enum EnumFramerateLimit {
+public enum EnumSettingFramerate {
 	PowerSaver(30),
 	Standard(60),
 	HighPerformance(120),
@@ -8,7 +8,7 @@ public enum EnumFramerateLimit {
 	
 	private int framerate;
 
-	EnumFramerateLimit(int framerate) {
+	EnumSettingFramerate(int framerate) {
 		this.framerate = framerate;
 	}
 

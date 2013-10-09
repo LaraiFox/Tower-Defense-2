@@ -24,8 +24,8 @@ public class GuiListBox extends GuiElement {
 	private List<String> contents;
 	private boolean opened;
 
-	public GuiListBox(int x, int y, int width, int height, float theta) {
-		super("res/gui/listbox.png", x, y, width, height, theta);
+	public GuiListBox(int x, int y, int width, int height) {
+		super("res/gui/listbox.png", x, y, width, height);
 
 		try {
 			this.contentBoxTexture = TextureLoader.getTexture(new FileInputStream(new File("res/gui/listbox_content.png")));
@@ -49,8 +49,8 @@ public class GuiListBox extends GuiElement {
 		/*
 		 * Need to create at least two display lists.
 		 * 
-		 * One display list will be for the bottom edge of the content box and the other will be for the central sections. The central sections can
-		 * then be reused as many times as necessary to allow all the lines of test to fit.
+		 * One display list will be for the bottom edge of the content box and the other will be for the central sections. The central sections can then be
+		 * reused as many times as necessary to allow all the lines of test to fit.
 		 * 
 		 * - I may need a third display list for the top edge of the content box. I will need to check the image file when I have time.
 		 */

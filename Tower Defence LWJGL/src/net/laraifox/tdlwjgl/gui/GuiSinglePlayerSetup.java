@@ -1,8 +1,5 @@
 package net.laraifox.tdlwjgl.gui;
 
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,12 +12,14 @@ import net.laraifox.tdlwjgl.enums.EnumGameState;
 import net.laraifox.tdlwjgl.enums.EnumMenuState;
 import net.laraifox.tdlwjgl.enums.EnumProgramState;
 import net.laraifox.tdlwjgl.guielement.GuiButton;
-import net.laraifox.tdlwjgl.main.TowerDefenseGame;
 import net.laraifox.tdlwjgl.main.MenuManager;
+import net.laraifox.tdlwjgl.main.TowerDefenseGame;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiSinglePlayerSetup extends Gui {
-	private GuiButton start;
-	private GuiButton back;
+	private GuiButton startButton;
+	private GuiButton backButton;
 
 	public GuiSinglePlayerSetup(int width, int height) {
 		super(0, 0, width, height);
@@ -37,40 +36,39 @@ public class GuiSinglePlayerSetup extends Gui {
 	}
 
 	protected void initializeGuiElements() {
-		this.start = new GuiButton(width - 300, 50, 250, 50, 0.0f, "Start Game");
-		this.back = new GuiButton(50, 50, 250, 50, 0.0f, "Back");
+		this.startButton = new GuiButton(width - 300, 50, 250, 50, "Start Game");
+		this.backButton = new GuiButton(50, 50, 250, 50, "Back");
 	}
 
 	public void update(TowerDefenseGame game, MenuManager manager) {
-		start.update();
-		back.update();
+		startButton.update();
+		backButton.update();
 
-		if (start.getState() == EnumButtonState.Clicked) {
+		if (startButton.getState() == EnumButtonState.Clicked) {
 			game.setProgramState(EnumProgramState.Game);
 			game.setGameState(EnumGameState.SinglePlayer);
 
 			manager.setMenuState(EnumMenuState.Title);
-		} else if (back.getState() == EnumButtonState.Clicked) {
+		} else if (backButton.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.Title);
 		}
-		
-		if (start.getState() == EnumButtonState.Hovered) {
-			Rectangle bounds = start.getBounds();
+
+		if (startButton.getState() == EnumButtonState.Hovered) {
+			Rectangle bounds = startButton.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);
-		} else if (back.getState() == EnumButtonState.Hovered) {
-			Rectangle bounds = back.getBounds();
+		} else if (backButton.getState() == EnumButtonState.Hovered) {
+			Rectangle bounds = backButton.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);
 		}
 	}
 
 	public void render() {
-		glPushMatrix();
+		GL11.glPushMatrix();
 		texture.bindTexture();
 		super.render();
-
-		start.render();
-		back.render();
-
-		glPopMatrix();
+		
+		startButton.render();
+		backButton.render();
+		GL11.glPopMatrix();
 	}
 }

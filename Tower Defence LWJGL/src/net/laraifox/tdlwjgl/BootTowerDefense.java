@@ -1,6 +1,7 @@
 package net.laraifox.tdlwjgl;
 
 import java.io.File;
+import java.io.IOException;
 
 import net.laraifox.tdlwjgl.main.TowerDefenseGame;
 import net.laraifox.tdlwjgl.main.Settings;
@@ -13,9 +14,11 @@ import net.laraifox.tdlwjgl.main.Settings;
  * 
  */
 public class BootTowerDefense {
-	public static void main(String[] args) throws Exception {
-		String operatingSystem = System.getProperty("os.name").toLowerCase();
+	private static final int DEFAULT_ORTHO_WIDTH = 1600;
+	private static final int DEFAULT_ORTHO_HEIGHT = 900;
 
+	public static void main(String[] args) {
+		String operatingSystem = System.getProperty("os.name").toLowerCase();
 		String username = System.getProperty("user.name");
 		String programFolder = Settings.getProgramFolderName();
 
@@ -33,22 +36,24 @@ public class BootTowerDefense {
 
 			Settings.setProgramDirectory("/home/" + username + programFolder);
 		} else {
-			throw new Exception("Your Operating System (" + operatingSystem + ") is unrecognised or unsupported");
+			System.err.println("Your Operating System (" + operatingSystem + ") is unrecognised or unsupported");
+			new Exception().printStackTrace();
+			System.exit(1);
 		}
 
 		try {
+			Settings.initializeProgramDirectories();
 			Settings.loadSettings();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-		TowerDefenseGame game = new TowerDefenseGame();
-		game.intitialize();
-		game.start();
+			TowerDefenseGame programDisplay = new TowerDefenseGame(Settings.getWidth(), Settings.getHeight());
+			// programDisplay.setOrtho(0, DEFAULT_ORTHO_WIDTH, 0, DEFAULT_ORTHO_HEIGHT, -1, 1);
+			programDisplay.intitialize();
+			programDisplay.start();
 
-		try {
 			Settings.saveSettings();
-		} catch (Exception e) {
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

@@ -44,6 +44,10 @@ public class SpriteSheet {
 		texture.bindTexture();
 	}
 
+	public Texture getTexture() {
+		return texture;
+	}
+
 	public int getTileWidth() {
 		return tileWidth;
 	}

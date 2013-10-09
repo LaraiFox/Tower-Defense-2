@@ -1,8 +1,5 @@
 package net.laraifox.tdlwjgl.gui;
 
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,8 +13,10 @@ import net.laraifox.tdlwjgl.enums.EnumMenuState;
 import net.laraifox.tdlwjgl.enums.EnumProgramState;
 import net.laraifox.tdlwjgl.guielement.GuiButton;
 import net.laraifox.tdlwjgl.guielement.GuiLabel;
-import net.laraifox.tdlwjgl.main.TowerDefenseGame;
 import net.laraifox.tdlwjgl.main.MenuManager;
+import net.laraifox.tdlwjgl.main.TowerDefenseGame;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiQuit extends Gui {
 	private GuiButton yesButton;
@@ -40,10 +39,10 @@ public class GuiQuit extends Gui {
 	}
 
 	protected void initializeGuiElements() {
-		this.yesButton = new GuiButton((width - 250) / 2, (height / 10) * 5, 250, 50, 0.0f, "Yes");
-		this.noButton = new GuiButton((width - 250) / 2, (height / 10) * 4, 250, 50, 0.0f, "No");
+		this.yesButton = new GuiButton((width - 250) / 2, (height / 10) * 5, 250, 50, "Yes");
+		this.noButton = new GuiButton((width - 250) / 2, (height / 10) * 4, 250, 50, "No");
 
-		this.questionLabel = new GuiLabel(0, (height / 10) * 6, width, 50, 0.0f, "Are You Sure You Want To Quit?", EnumFontSize.Medium);
+		this.questionLabel = new GuiLabel(0, (height / 10) * 6, width, 50, "Are You Sure You Want To Quit?", EnumFontSize.Medium);
 	}
 
 	public void update(TowerDefenseGame game, MenuManager manager) {
@@ -55,7 +54,7 @@ public class GuiQuit extends Gui {
 		} else if (noButton.getState() == EnumButtonState.Clicked) {
 			manager.setMenuState(EnumMenuState.Title);
 		}
-		
+
 		if (yesButton.getState() == EnumButtonState.Hovered) {
 			Rectangle bounds = yesButton.getBounds();
 			manager.setCursorLocation((int) bounds.getCenterX(), (int) bounds.getCenterY(), bounds.width);
@@ -66,15 +65,14 @@ public class GuiQuit extends Gui {
 	}
 
 	public void render() {
-		glPushMatrix();
+		GL11.glPushMatrix();
 		texture.bindTexture();
 		super.render();
 
-		yesButton.render();
-		noButton.render();
-
 		questionLabel.render();
 
-		glPopMatrix();
+		yesButton.render();
+		noButton.render();
+		GL11.glPopMatrix();
 	}
 }

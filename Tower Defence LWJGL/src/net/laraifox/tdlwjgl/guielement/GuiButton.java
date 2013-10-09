@@ -10,8 +10,8 @@ public class GuiButton extends GuiElement {
 
 	private String text;
 
-	public GuiButton(int x, int y, int width, int height, float theta, String text) {
-		super("res/gui/button.png", x, y, width, height, theta);
+	public GuiButton(int x, int y, int width, int height, String text) {
+		super("res/gui/button.png", x, y, width, height);
 
 		this.text = text;
 	}

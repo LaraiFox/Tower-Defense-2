@@ -11,7 +11,6 @@ import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glNewList;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 import static org.lwjgl.opengl.GL11.glVertex2i;
@@ -33,10 +32,9 @@ public abstract class GuiElement {
 	protected Texture texture;
 	protected int displayListID;
 	protected Rectangle bounds;
-	protected float theta;
 	protected EnumButtonState buttonState;
 
-	protected GuiElement(String textureFile, int x, int y, int width, int height, float theta) {
+	protected GuiElement(String textureFile, int x, int y, int width, int height) {
 		try {
 			this.texture = TextureLoader.getTexture(new FileInputStream(new File(textureFile)));
 		} catch (FileNotFoundException e) {
@@ -50,30 +48,30 @@ public abstract class GuiElement {
 		createDisplayList();
 	}
 
+	protected GuiElement(Texture texture, int displayListID, int x, int y, int width, int height) {
+		this.texture = texture;
+		this.displayListID = displayListID;
+		this.bounds = new Rectangle(x, y, width, height);
+		this.buttonState = EnumButtonState.None;
+	}
+
 	protected void createDisplayList() {
 		displayListID = glGenLists(1);
 
 		float tx = 1.0f; // ((float) texture.getImageWidth()) / ((float) texture.getTextureWidth());
-		float ty = 1.0f; // ((float) texture.getImageHeight()) / ((float) texture.getTextureHeight());
+		float ty = 1.0f; // ((float) texture.getImageHeight()) / ((float) / texture.getTextureHeight());
 
 		glNewList(displayListID, GL_COMPILE);
-		{
-			glBegin(GL_QUADS);
-			{
-				glTexCoord2f(0.0f, ty);
-				glVertex2i(0, 0);
-
-				glTexCoord2f(tx, ty);
-				glVertex2i(bounds.width, 0);
-
-				glTexCoord2f(tx, 0.0f);
-				glVertex2i(bounds.width, bounds.height);
-
-				glTexCoord2f(0.0f, 0.0f);
-				glVertex2i(0, bounds.height);
-			}
-			glEnd();
-		}
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, ty);
+		glVertex2i(0, 0);
+		glTexCoord2f(tx, ty);
+		glVertex2i(bounds.width, 0);
+		glTexCoord2f(tx, 0.0f);
+		glVertex2i(bounds.width, bounds.height);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2i(0, bounds.height);
+		glEnd();
 		glEndList();
 	}
 
@@ -102,12 +100,10 @@ public abstract class GuiElement {
 	}
 
 	public void render() {
+		texture.bindTexture();
 		glPushMatrix();
 		glLoadIdentity();
-		glTranslatef(bounds.x + bounds.width, bounds.y + bounds.height, 0);
-		glRotatef(theta, 0, 0, 1);
-		glTranslatef(-bounds.width, -bounds.height, 0);
-		texture.bindTexture();
+		glTranslatef(bounds.x, bounds.y, 0);
 		glCallList(displayListID);
 		glPopMatrix();
 	}

@@ -70,7 +70,7 @@ public class Level {
 		if (newTower != null && player.money >= newTower.getCost()) {
 			towers.add(newTower);
 			player.money -= newTower.getCost();
-			tiles[x + y * width].setCanPlaceTower(false);
+			tiles[x + y * width].setTowerPlaceable(false);
 		}
 	}
 
@@ -79,7 +79,7 @@ public class Level {
 			if (towers.get(i).getTileX() == x && towers.get(i).getTileY() == y) {
 				player.money += (int) (towers.get(i).getCost() * 0.75);
 				towers.remove(i);
-				tiles[x + y * width].setCanPlaceTower(true);
+				tiles[x + y * width].setTowerPlaceable(true);
 			}
 		}
 	}
@@ -126,7 +126,7 @@ public class Level {
 			int x = Mouse.getX() / Tile.getTileSize() - 1;
 			int y = Mouse.getY() / Tile.getTileSize() - 1;
 			if (x >= 0 && x < width && y >= 0 && y < height) {
-				if (tiles[x + y * width].canPlaceTower()) {
+				if (tiles[x + y * width].isTowerPlaceable()) {
 					buildTower(selectedTowerType, x, y);
 				}
 			}
@@ -136,7 +136,7 @@ public class Level {
 			for (int i = 0; i < tiles.length; i++) {
 				int x = i % width;
 				int y = i / width;
-				if (tiles[x + y * width].canPlaceTower()) {
+				if (tiles[x + y * width].isTowerPlaceable()) {
 					player.money += selectedTowerType.getBaseCost();
 					buildTower(selectedTowerType, x, y);
 				}
@@ -151,7 +151,7 @@ public class Level {
 					int x = Mouse.getX() / Tile.getTileSize() - 1;
 					int y = Mouse.getY() / Tile.getTileSize() - 1;
 					if (x >= 0 && x < width && y >= 0 && y < height) {
-						if (!tiles[x + y * width].canPlaceTower()) {
+						if (!tiles[x + y * width].isTowerPlaceable()) {
 							destroyTower(x, y);
 						}
 					}
@@ -227,7 +227,7 @@ public class Level {
 			int x = Mouse.getX() / Tile.getTileSize() - 1;
 			int y = Mouse.getY() / Tile.getTileSize() - 1;
 			if (x >= 0 && x < width && y >= 0 && y < height) {
-				Tower.renderGhost(selectedTowerType, x * Tile.getTileSize(), y * Tile.getTileSize(), tiles[x + y * width].canPlaceTower());
+				Tower.renderGhost(selectedTowerType, x * Tile.getTileSize(), y * Tile.getTileSize(), tiles[x + y * width].isTowerPlaceable());
 			}
 		}
 		GL11.glPopMatrix();

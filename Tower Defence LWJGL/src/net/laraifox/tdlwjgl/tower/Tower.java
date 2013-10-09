@@ -109,8 +109,7 @@ public abstract class Tower {
 	}
 
 	public void update(GameTimer gameTime, WaveManager waveManager) {
-		if ((targetWave < 0 || targetEntity < 0) || ((int) position.distanceTo(waveManager.getEntityAt(targetWave, targetEntity).getPosition()) > firingRadius)
-				|| !waveManager.getEntityAt(targetWave, targetEntity).isAlive()) {
+		if ((targetWave < 0 || targetEntity < 0) || ((int) position.distanceTo(waveManager.getEntityAt(targetWave, targetEntity).getPosition()) > firingRadius) || !waveManager.getEntityAt(targetWave, targetEntity).isAlive()) {
 			int nextEntity = -1;
 			int nextWave = -1;
 			int nextDistance = -1;
@@ -142,7 +141,7 @@ public abstract class Tower {
 	public void render() {
 		SpriteSheet.Towers.bindSheetTexture();
 		GL11.glPushMatrix();
-		GL11.glTranslated(position.getX() + getWidth() / 2, position.getY() + getHeight() / 2, 0);
+		GL11.glTranslated(center.getX(), center.getY(), 0);
 		GL11.glCallList(baseDisplayListID);
 		GL11.glRotatef(theta, 0, 0, 1);
 		GL11.glCallList(turretDisplayListID);

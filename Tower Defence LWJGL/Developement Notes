@@ -51,15 +51,11 @@
      - Music volume
      - Sound effect volume
    - Main menu / title screen
-     - Include splashes?
      - Animated background?
      - Needs music
-   - Credits
-   - Quit
-   - Level editor setup
-   - Single player setup
-   - Multi player setup?
-   - Load saved games
+   - Extras
+     - How To Play / Tutorial
+     - Credits
  - Add sounds into the game
    - Towers firing
    - Entities dying
@@ -69,7 +65,6 @@
    - Button clicks
    - Background music
    - Terrain sound effects?
- - Add a MenuManager to the game
  - Add all the different menus required
 
 
