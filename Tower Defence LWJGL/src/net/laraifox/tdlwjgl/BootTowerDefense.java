@@ -46,7 +46,7 @@ public class BootTowerDefense {
 			Settings.loadSettings();
 
 			TowerDefenseGame programDisplay = new TowerDefenseGame(Settings.getWidth(), Settings.getHeight());
-			// programDisplay.setOrtho(0, DEFAULT_ORTHO_WIDTH, 0, DEFAULT_ORTHO_HEIGHT, -1, 1);
+			programDisplay.setOrtho(0, DEFAULT_ORTHO_WIDTH, 0, DEFAULT_ORTHO_HEIGHT, -1, 1);
 			programDisplay.intitialize();
 			programDisplay.start();
 

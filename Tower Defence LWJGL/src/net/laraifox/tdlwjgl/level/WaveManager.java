@@ -3,6 +3,7 @@ package net.laraifox.tdlwjgl.level;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.laraifox.lib.graphics.VectorFont;
 import net.laraifox.tdlwjgl.entity.Entity;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.util.GameTimer;
@@ -55,8 +56,8 @@ public class WaveManager {
 	}
 
 	public void update(GameTimer gameTimer, Level level) {
-		StringRenderer.addString("Wave Manager Status: " + (gameStarted ? "Updating.." : "Not Started"), 16, 64, EnumFontSize.Small);
-		StringRenderer.addString("Wave: " + wavesStarted + ", " + waves.size(), 16, 80, EnumFontSize.Small);
+		StringRenderer.addString("Wave Manager Status: " + (gameStarted ? "Updating.." : "Not Started"), 16, 64, EnumFontSize.Small, VectorFont.ALIGN_LEFT);
+		StringRenderer.addString("Wave: " + wavesStarted + ", " + waves.size(), 16, 80, EnumFontSize.Small, VectorFont.ALIGN_LEFT);
 
 		if (gameStarted) {
 			if ((wavesStarted < waves.size()) && (gameTimer.getTicks() - previousStartTick >= waves.get(wavesStarted).getDelay())) {

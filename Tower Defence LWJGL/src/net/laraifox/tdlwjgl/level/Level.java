@@ -3,6 +3,7 @@ package net.laraifox.tdlwjgl.level;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.laraifox.lib.graphics.VectorFont;
 import net.laraifox.tdlwjgl.entity.Entity;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.enums.EnumTowerType;
@@ -13,10 +14,10 @@ import net.laraifox.tdlwjgl.tower.Tower;
 import net.laraifox.tdlwjgl.tower.TowerBasic;
 import net.laraifox.tdlwjgl.tower.TowerFast;
 import net.laraifox.tdlwjgl.util.GameTimer;
+import net.laraifox.tdlwjgl.util.MouseHandler;
 import net.laraifox.tdlwjgl.util.StringRenderer;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class Level {
@@ -103,8 +104,8 @@ public class Level {
 	}
 
 	public void update(GameTimer gameTimer) {
-		StringRenderer.addString("Lives: " + player.getLives(), 16, 32, EnumFontSize.Small);
-		StringRenderer.addString("Money: " + player.money, 16, 48, EnumFontSize.Small);
+		StringRenderer.addString("Lives: " + player.getLives(), 16, 32, EnumFontSize.Small, VectorFont.ALIGN_LEFT);
+		StringRenderer.addString("Money: " + player.money, 16, 48, EnumFontSize.Small, VectorFont.ALIGN_LEFT);
 
 		for (int i = 0; i < projectiles.size(); i++) {
 			if (!projectiles.get(i).isAlive()) {
@@ -122,9 +123,9 @@ public class Level {
 
 		waveManager.update(gameTimer, this);
 
-		if (Mouse.isButtonDown(0)) {
-			int x = Mouse.getX() / Tile.getTileSize() - 1;
-			int y = Mouse.getY() / Tile.getTileSize() - 1;
+		if (MouseHandler.isButtonDown(0)) {
+			int x = MouseHandler.getX() / Tile.getTileSize() - 1;
+			int y = MouseHandler.getY() / Tile.getTileSize() - 1;
 			if (x >= 0 && x < width && y >= 0 && y < height) {
 				if (tiles[x + y * width].isTowerPlaceable()) {
 					buildTower(selectedTowerType, x, y);
@@ -143,13 +144,13 @@ public class Level {
 			}
 		}
 
-		if (Mouse.isButtonDown(1)) {
+		if (MouseHandler.isButtonDown(1)) {
 			if (!MOUSE_3) {
 				if (selectedTowerType != EnumTowerType.None) {
 					selectedTowerType = EnumTowerType.None;
 				} else {
-					int x = Mouse.getX() / Tile.getTileSize() - 1;
-					int y = Mouse.getY() / Tile.getTileSize() - 1;
+					int x = MouseHandler.getX() / Tile.getTileSize() - 1;
+					int y = MouseHandler.getY() / Tile.getTileSize() - 1;
 					if (x >= 0 && x < width && y >= 0 && y < height) {
 						if (!tiles[x + y * width].isTowerPlaceable()) {
 							destroyTower(x, y);
@@ -201,7 +202,7 @@ public class Level {
 	}
 
 	private void updatePreviousInput() {
-		MOUSE_3 = Mouse.isButtonDown(1);
+		MOUSE_3 = MouseHandler.isButtonDown(1);
 
 		KEY_B = Keyboard.isKeyDown(Keyboard.KEY_B);
 		KEY_F = Keyboard.isKeyDown(Keyboard.KEY_F);
@@ -224,8 +225,8 @@ public class Level {
 			towers.get(i).render();
 
 		if (selectedTowerType != EnumTowerType.None) {
-			int x = Mouse.getX() / Tile.getTileSize() - 1;
-			int y = Mouse.getY() / Tile.getTileSize() - 1;
+			int x = MouseHandler.getX() / Tile.getTileSize() - 1;
+			int y = MouseHandler.getY() / Tile.getTileSize() - 1;
 			if (x >= 0 && x < width && y >= 0 && y < height) {
 				Tower.renderGhost(selectedTowerType, x * Tile.getTileSize(), y * Tile.getTileSize(), tiles[x + y * width].isTowerPlaceable());
 			}

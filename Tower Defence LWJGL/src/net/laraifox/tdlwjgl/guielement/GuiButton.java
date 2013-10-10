@@ -1,6 +1,7 @@
 package net.laraifox.tdlwjgl.guielement;
 
 import static org.lwjgl.opengl.GL11.glColor3f;
+import net.laraifox.lib.graphics.VectorFont;
 import net.laraifox.tdlwjgl.enums.EnumButtonState;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.util.StringRenderer;
@@ -32,7 +33,7 @@ public class GuiButton extends GuiElement {
 
 		super.render();
 
-		StringRenderer.render(text, bounds.x + (bounds.width - text.length() * fontsize.getWidth()) / 2, bounds.y + (bounds.height - fontsize.getHeight()) / 2, fontsize);
+		StringRenderer.render(text, bounds.x + bounds.width / 2, bounds.y + (bounds.height - 25) / 2, fontsize, VectorFont.ALIGN_CENTER);
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 	}

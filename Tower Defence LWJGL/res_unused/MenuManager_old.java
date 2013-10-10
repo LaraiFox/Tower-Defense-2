@@ -35,7 +35,7 @@ import net.laraifox.tdlwjgl.gui.GuiButton;
 import net.laraifox.tdlwjgl.gui.GuiLabel;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
+import org.lwjgl.input.MouseHandler;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
@@ -246,7 +246,7 @@ public class MenuManager_old {
 	}
 
 	private void updatePreviousInput() {
-		MOUSE1 = Mouse.isButtonDown(0);
+		MOUSE1 = MouseHandler.isButtonDown(0);
 
 		KEY_UP = Keyboard.isKeyDown(Keyboard.KEY_UP);
 		KEY_DOWN = Keyboard.isKeyDown(Keyboard.KEY_DOWN);

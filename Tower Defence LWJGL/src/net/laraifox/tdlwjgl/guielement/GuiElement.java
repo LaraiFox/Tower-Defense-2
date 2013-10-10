@@ -24,9 +24,7 @@ import java.io.IOException;
 import net.laraifox.lib.graphics.Texture;
 import net.laraifox.lib.graphics.TextureLoader;
 import net.laraifox.tdlwjgl.enums.EnumButtonState;
-import net.laraifox.tdlwjgl.main.Settings;
-
-import org.lwjgl.input.Mouse;
+import net.laraifox.tdlwjgl.util.MouseHandler;
 
 public abstract class GuiElement {
 	protected Texture texture;
@@ -84,8 +82,8 @@ public abstract class GuiElement {
 	}
 
 	public void update() {
-		if (bounds.contains(Mouse.getX() * Settings.getMouseSX(), Mouse.getY() * Settings.getMouseSY())) {
-			if (Mouse.isButtonDown(0)) {
+		if (bounds.contains(MouseHandler.getX(), MouseHandler.getY())) {
+			if (MouseHandler.isButtonDown(0)) {
 				buttonState = EnumButtonState.Pressed;
 			} else {
 				if (buttonState == EnumButtonState.Pressed) {

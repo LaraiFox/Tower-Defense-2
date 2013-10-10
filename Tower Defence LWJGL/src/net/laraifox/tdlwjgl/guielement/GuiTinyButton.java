@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL11.glGenLists;
 import static org.lwjgl.opengl.GL11.glNewList;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2i;
+import net.laraifox.lib.graphics.VectorFont;
 import net.laraifox.tdlwjgl.enums.EnumButtonState;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.util.StringRenderer;
@@ -82,7 +83,7 @@ public class GuiTinyButton extends GuiElement {
 
 		super.render();
 
-		StringRenderer.render(text, bounds.x + (bounds.width - text.length() * fontsize.getWidth()) / 2, bounds.y + (bounds.height - fontsize.getHeight()) / 2, fontsize);
+		StringRenderer.render(text, bounds.x + bounds.width / 2, bounds.y + (bounds.height - fontsize.getHeight()) / 2, fontsize, VectorFont.ALIGN_CENTER);
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 	}

@@ -3,6 +3,7 @@ package net.laraifox.tdlwjgl.main;
 import java.util.Random;
 
 import net.laraifox.lib.display.OpenGLDisplay;
+import net.laraifox.lib.graphics.VectorFont;
 import net.laraifox.tdlwjgl.entity.Entity;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.enums.EnumGameState;
@@ -16,7 +17,10 @@ import net.laraifox.tdlwjgl.util.GameTimer;
 import net.laraifox.tdlwjgl.util.MouseHandler;
 import net.laraifox.tdlwjgl.util.StringRenderer;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.PixelFormat;
 
 public class TowerDefenseGame extends OpenGLDisplay {
 	private GameTimer gameTimer;
@@ -56,11 +60,8 @@ public class TowerDefenseGame extends OpenGLDisplay {
 		// e.printStackTrace();
 		// }
 
-		Settings.setMouseSX(1.0f);
-		Settings.setMouseSY(1.0f);
-
 		Entity.initialize();
-		MouseHandler.initialize();
+		MouseHandler.initialize((float) getOrthoRight() / (float) getWidth(), (float) getOrthoTop() / (float) getHeight());
 		Projectile.initialize();
 		StringRenderer.initialize();
 		Tile.initialize();
@@ -68,12 +69,16 @@ public class TowerDefenseGame extends OpenGLDisplay {
 		TowerFast.initialize();
 	}
 
+	protected void createDisplay() throws LWJGLException {
+		Display.create(new PixelFormat(0, 4, 1, 1, 8, 0, 1, 1, false));
+	}
+
 	protected void initializeVariables() {
 		this.gameTimer = new GameTimer(getFramerate());
 		this.programState = EnumProgramState.Menu;
 		this.random = new Random();
 
-		this.menuManager = new MenuManager(getWidth(), getHeight(), random);
+		this.menuManager = new MenuManager(getOrthoRight(), getOrthoTop(), random);
 		this.gameManager = new GameManager();
 		this.levelEditor = new LevelEditor();
 
@@ -87,6 +92,7 @@ public class TowerDefenseGame extends OpenGLDisplay {
 	}
 
 	protected void update(double delta) {
+		StringRenderer.clear();
 		MouseHandler.update();
 		gameTimer.update();
 
@@ -116,9 +122,8 @@ public class TowerDefenseGame extends OpenGLDisplay {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glLoadIdentity();
 
-		StringRenderer.clear();
 		if (showFramerate) {
-			StringRenderer.addString("FPS: " + getCurrentFPS() + ", (updates: " + getCurrentUPS() + ")", 48, getHeight() - 80, EnumFontSize.Medium);
+			StringRenderer.addString("FPS: " + getCurrentFPS() + ", (updates: " + getCurrentUPS() + ")", 48, getHeight() - 80, EnumFontSize.Medium, VectorFont.ALIGN_LEFT);
 		}
 
 		switch (programState) {

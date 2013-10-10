@@ -28,8 +28,6 @@ public class Settings {
 
 	private static String programDirectory = "";
 
-	private static float mouseSX, mouseSY;
-
 	private static int width, height;
 	private static EnumSettingFramerate framerateLimit;
 
@@ -129,22 +127,6 @@ public class Settings {
 
 	public static String getSettingsFileName() {
 		return SETTINGS_FILE_NAME;
-	}
-
-	public static float getMouseSX() {
-		return mouseSX;
-	}
-
-	public static void setMouseSX(float mouseSX) {
-		Settings.mouseSX = mouseSX;
-	}
-
-	public static float getMouseSY() {
-		return mouseSY;
-	}
-
-	public static void setMouseSY(float mouseSY) {
-		Settings.mouseSY = mouseSY;
 	}
 
 	public static int getWidth() {

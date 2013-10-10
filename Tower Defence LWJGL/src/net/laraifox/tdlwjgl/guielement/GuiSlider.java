@@ -23,8 +23,7 @@ import java.io.IOException;
 import net.laraifox.lib.graphics.Texture;
 import net.laraifox.lib.graphics.TextureLoader;
 import net.laraifox.tdlwjgl.enums.EnumButtonState;
-
-import org.lwjgl.input.Mouse;
+import net.laraifox.tdlwjgl.util.MouseHandler;
 
 public class GuiSlider extends GuiElement {
 	private static final int sliderBarWidth = 0;
@@ -84,7 +83,7 @@ public class GuiSlider extends GuiElement {
 
 	public void update() {
 		if (buttonState == EnumButtonState.Pressed) {
-			float dx = Mouse.getX() - bounds.x;
+			float dx = MouseHandler.getX() - bounds.x;
 
 			value = dx / bounds.width;
 

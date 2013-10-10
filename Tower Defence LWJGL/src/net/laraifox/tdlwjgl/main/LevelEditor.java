@@ -11,9 +11,9 @@ import net.laraifox.tdlwjgl.level.LevelFormatter;
 import net.laraifox.tdlwjgl.level.Tile;
 import net.laraifox.tdlwjgl.level.WaveManager;
 import net.laraifox.tdlwjgl.level.WaypointList;
+import net.laraifox.tdlwjgl.util.MouseHandler;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class LevelEditor {
@@ -103,9 +103,9 @@ public class LevelEditor {
 			save();
 		}
 
-		if (Mouse.isButtonDown(0)) {
-			int x = Mouse.getX() / Tile.getTileSize() - 1;
-			int y = Mouse.getY() / Tile.getTileSize() - 1;
+		if (MouseHandler.isButtonDown(0)) {
+			int x = MouseHandler.getX() / Tile.getTileSize() - 1;
+			int y = MouseHandler.getY() / Tile.getTileSize() - 1;
 			if (x >= 0 && x < width && y >= 0 && y < height) {
 				tiles[x + y * width] = selectedTile;
 			}
