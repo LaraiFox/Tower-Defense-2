@@ -3,7 +3,7 @@ package net.laraifox.tdlwjgl.projectile;
 import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 
-import net.laraifox.lib.math.Vector2;
+import net.laraifox.lib.math.Vector2f;
 import net.laraifox.tdlwjgl.entity.Entity;
 import net.laraifox.tdlwjgl.enums.EnumProjectileType;
 import net.laraifox.tdlwjgl.util.SpriteSheet;
@@ -18,9 +18,9 @@ public abstract class Projectile {
 
 	private EnumProjectileType projectileType;
 	private int projectileID;
-	private Vector2 position;
-	private Vector2 previousPosition;
-	private Vector2 velocity;
+	private Vector2f position;
+	private Vector2f previousPosition;
+	private Vector2f velocity;
 	private float theta;
 
 	private boolean alive;
@@ -30,12 +30,12 @@ public abstract class Projectile {
 	private int waveIndex;
 	private int entityIndex;
 
-	public Projectile(EnumProjectileType projectileType, Vector2 position, float theta, int waveIndex, int entityIndex) {
+	public Projectile(EnumProjectileType projectileType, Vector2f position, float theta, int waveIndex, int entityIndex) {
 		this.projectileType = projectileType;
 		this.projectileID = projectileType.getProjectileID();
-		this.position = new Vector2(position);
-		this.previousPosition = new Vector2(position);
-		this.velocity = Vector2.Zero();
+		this.position = new Vector2f(position);
+		this.previousPosition = new Vector2f(position);
+		this.velocity = Vector2f.Zero();
 		this.theta = theta;
 
 		this.alive = false;
@@ -77,7 +77,7 @@ public abstract class Projectile {
 	}
 
 	public void update(Entity entity) {
-		Vector2 vectorToEnity = new Vector2(entity.getPosition());
+		Vector2f vectorToEnity = new Vector2f(entity.getPosition());
 		vectorToEnity.add(entity.getCenter());
 		vectorToEnity.subtract(position);
 		theta = (float) Math.atan2(vectorToEnity.getY(), vectorToEnity.getX());

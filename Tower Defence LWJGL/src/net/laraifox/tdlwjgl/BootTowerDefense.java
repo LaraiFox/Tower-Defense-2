@@ -3,8 +3,11 @@ package net.laraifox.tdlwjgl;
 import java.io.File;
 import java.io.IOException;
 
-import net.laraifox.tdlwjgl.main.TowerDefenseGame;
+import net.laraifox.lib.graphics.OrthographicProjection;
 import net.laraifox.tdlwjgl.main.Settings;
+import net.laraifox.tdlwjgl.main.TowerDefenseGame;
+
+import org.lwjgl.LWJGLException;
 
 /**
  * 
@@ -46,7 +49,7 @@ public class BootTowerDefense {
 			Settings.loadSettings();
 
 			TowerDefenseGame programDisplay = new TowerDefenseGame(Settings.getWidth(), Settings.getHeight());
-			programDisplay.setOrtho(0, DEFAULT_ORTHO_WIDTH, 0, DEFAULT_ORTHO_HEIGHT, -1, 1);
+			programDisplay.setOrthographicProjection(new OrthographicProjection(DEFAULT_ORTHO_WIDTH, DEFAULT_ORTHO_HEIGHT, false));
 			programDisplay.intitialize();
 			programDisplay.start();
 
@@ -54,6 +57,8 @@ public class BootTowerDefense {
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
 	}

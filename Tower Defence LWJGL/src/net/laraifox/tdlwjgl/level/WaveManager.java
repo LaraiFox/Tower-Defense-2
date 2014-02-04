@@ -3,7 +3,7 @@ package net.laraifox.tdlwjgl.level;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.laraifox.lib.graphics.VectorFont;
+import net.laraifox.lib.text.VectorFont;
 import net.laraifox.tdlwjgl.entity.Entity;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.util.GameTimer;

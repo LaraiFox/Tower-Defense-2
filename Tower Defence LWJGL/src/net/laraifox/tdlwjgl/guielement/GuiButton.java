@@ -1,7 +1,7 @@
 package net.laraifox.tdlwjgl.guielement;
 
 import static org.lwjgl.opengl.GL11.glColor3f;
-import net.laraifox.lib.graphics.VectorFont;
+import net.laraifox.lib.text.VectorFont;
 import net.laraifox.tdlwjgl.enums.EnumButtonState;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.util.StringRenderer;

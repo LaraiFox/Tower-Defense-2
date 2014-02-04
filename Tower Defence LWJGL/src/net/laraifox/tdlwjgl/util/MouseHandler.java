@@ -1,6 +1,6 @@
 package net.laraifox.tdlwjgl.util;
 
-import net.laraifox.lib.graphics.VectorFont;
+import net.laraifox.lib.text.VectorFont;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 
 import org.lwjgl.input.Mouse;

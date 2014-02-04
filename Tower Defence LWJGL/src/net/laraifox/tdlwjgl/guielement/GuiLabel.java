@@ -1,6 +1,6 @@
 package net.laraifox.tdlwjgl.guielement;
 
-import net.laraifox.lib.graphics.VectorFont;
+import net.laraifox.lib.text.VectorFont;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.util.StringRenderer;
 

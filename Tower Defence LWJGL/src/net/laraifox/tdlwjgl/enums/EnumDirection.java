@@ -1,21 +1,21 @@
 package net.laraifox.tdlwjgl.enums;
 
-import net.laraifox.lib.math.Vector2;
+import net.laraifox.lib.math.Vector2f;
 
 public enum EnumDirection {
-	None(Vector2.Zero()),
-	Down(Vector2.Down()),
-	Right(Vector2.Right()),
-	Up(Vector2.Up()),
-	Left(Vector2.Left());
+	None(Vector2f.Zero()),
+	Down(Vector2f.Down()),
+	Right(Vector2f.Right()),
+	Up(Vector2f.Up()),
+	Left(Vector2f.Left());
 
-	private Vector2 vector;
+	private Vector2f vector;
 
-	private EnumDirection(Vector2 vector) {
+	private EnumDirection(Vector2f vector) {
 		this.vector = vector;
 	}
 
-	public Vector2 getVector() {
+	public Vector2f getVector() {
 		return vector;
 	}
 }

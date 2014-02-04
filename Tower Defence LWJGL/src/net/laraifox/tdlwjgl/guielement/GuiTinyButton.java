@@ -10,7 +10,7 @@ import static org.lwjgl.opengl.GL11.glGenLists;
 import static org.lwjgl.opengl.GL11.glNewList;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2i;
-import net.laraifox.lib.graphics.VectorFont;
+import net.laraifox.lib.text.VectorFont;
 import net.laraifox.tdlwjgl.enums.EnumButtonState;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.util.StringRenderer;

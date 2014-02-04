@@ -6,8 +6,8 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.laraifox.lib.graphics.Color3f;
-import net.laraifox.lib.graphics.VectorFont;
+import net.laraifox.lib.math.Vector3f;
+import net.laraifox.lib.text.VectorFont;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 
 public class StringRenderer {
@@ -25,7 +25,7 @@ public class StringRenderer {
 
 	public static void render() {
 		for (GameString string : strings) {
-			glColor3f(string.color.getRed(), string.color.getGreen(), string.color.getBlue());
+			glColor3f(string.color.getX(), string.color.getY(), string.color.getZ());
 			render(string.text, string.x, string.y, string.fontsize, string.alignment);
 			glColor3f(1.0f, 1.0f, 1.0f);
 		}
@@ -64,19 +64,19 @@ public class StringRenderer {
 	}
 
 	public static void addString(String s, int x, int y, EnumFontSize fontsize, int alignment) {
-		strings.add(new GameString(s, x, y, fontsize, alignment, new Color3f(1.0f, 1.0f, 1.0f)));
+		strings.add(new GameString(s, x, y, fontsize, alignment, new Vector3f(1.0f, 1.0f, 1.0f)));
 	}
 
-	public static void addString(String s, int x, int y, EnumFontSize fontsize, int alignment, Color3f color) {
+	public static void addString(String s, int x, int y, EnumFontSize fontsize, int alignment, Vector3f color) {
 		strings.add(new GameString(s, x, y, fontsize, alignment, color));
 	}
 
 	public static void changeString(String s, int x, int y, EnumFontSize fontsize, int alignment, int i) {
 		if (i < strings.size())
-			strings.set(i, new GameString(s, x, y, fontsize, alignment, new Color3f(1.0f, 1.0f, 1.0f)));
+			strings.set(i, new GameString(s, x, y, fontsize, alignment, new Vector3f(1.0f, 1.0f, 1.0f)));
 	}
 
-	public static void changeString(String s, int x, int y, EnumFontSize fontsize, int alignment, Color3f color, int i) {
+	public static void changeString(String s, int x, int y, EnumFontSize fontsize, int alignment, Vector3f color, int i) {
 		if (i < strings.size())
 			strings.set(i, new GameString(s, x, y, fontsize, alignment, color));
 	}

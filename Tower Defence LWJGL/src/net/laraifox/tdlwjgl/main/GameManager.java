@@ -2,8 +2,8 @@ package net.laraifox.tdlwjgl.main;
 
 import java.io.FileNotFoundException;
 
-import net.laraifox.lib.graphics.Color3f;
-import net.laraifox.lib.graphics.VectorFont;
+import net.laraifox.lib.math.Vector3f;
+import net.laraifox.lib.text.VectorFont;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.enums.EnumGameState;
 import net.laraifox.tdlwjgl.enums.EnumProgramState;
@@ -69,9 +69,9 @@ public class GameManager {
 			leveltest.update(gameTime);
 
 			if (leveltest.isLevelComplete()) {
-				StringRenderer.addString("Level Complete!", game.getWidth() / 2, game.getHeight() / 2, EnumFontSize.Large, VectorFont.ALIGN_CENTER, new Color3f(1.0f, 1.0f, 0.0f));
-				StringRenderer.addString("Press Enter to return", game.getWidth() / 2, game.getHeight() / 2, EnumFontSize.Large, VectorFont.ALIGN_CENTER, new Color3f(1.0f, 1.0f, 0.0f));
-				StringRenderer.addString("to the title screen", game.getWidth() / 2, game.getHeight() / 2, EnumFontSize.Large, VectorFont.ALIGN_CENTER, new Color3f(1.0f, 1.0f, 0.0f));
+				StringRenderer.addString("Level Complete!", (int) (game.getWidth() / 2), (int) (game.getHeight() / 2), EnumFontSize.Large, VectorFont.ALIGN_CENTER, new Vector3f(1.0f, 1.0f, 0.0f));
+				StringRenderer.addString("Press Enter to return", (int) (game.getWidth() / 2), (int) game.getHeight() / 2, EnumFontSize.Large, VectorFont.ALIGN_CENTER, new Vector3f(1.0f, 1.0f, 0.0f));
+				StringRenderer.addString("to the title screen", (int) (game.getWidth() / 2), (int) game.getHeight() / 2, EnumFontSize.Large, VectorFont.ALIGN_CENTER, new Vector3f(1.0f, 1.0f, 0.0f));
 
 				if (Keyboard.isKeyDown(Keyboard.KEY_RETURN) && !KEY_RETURN) {
 					game.setProgramState(EnumProgramState.Menu);

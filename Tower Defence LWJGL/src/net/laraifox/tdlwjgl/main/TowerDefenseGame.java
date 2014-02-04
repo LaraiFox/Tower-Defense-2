@@ -3,7 +3,7 @@ package net.laraifox.tdlwjgl.main;
 import java.util.Random;
 
 import net.laraifox.lib.display.OpenGLDisplay;
-import net.laraifox.lib.graphics.VectorFont;
+import net.laraifox.lib.text.VectorFont;
 import net.laraifox.tdlwjgl.entity.Entity;
 import net.laraifox.tdlwjgl.enums.EnumFontSize;
 import net.laraifox.tdlwjgl.enums.EnumGameState;
@@ -17,8 +17,6 @@ import net.laraifox.tdlwjgl.util.GameTimer;
 import net.laraifox.tdlwjgl.util.MouseHandler;
 import net.laraifox.tdlwjgl.util.StringRenderer;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
 
@@ -36,7 +34,9 @@ public class TowerDefenseGame extends OpenGLDisplay {
 	private boolean showFramerate;
 
 	public TowerDefenseGame(int width, int height) {
-		super("Tower Defense", width, height, false, false, 60, 60);
+		super(width, height);
+
+		this.pixelFormat = new PixelFormat(0, 4, 1, 1, 8, 0, 1, 1, false);
 	}
 
 	protected void initializeResources() {
@@ -61,7 +61,7 @@ public class TowerDefenseGame extends OpenGLDisplay {
 		// }
 
 		Entity.initialize();
-		MouseHandler.initialize((float) getOrthoRight() / (float) getWidth(), (float) getOrthoTop() / (float) getHeight());
+		MouseHandler.initialize(orthographicProjection.getRight() / (float) getWidth(), orthographicProjection.getTop() / (float) getHeight());
 		Projectile.initialize();
 		StringRenderer.initialize();
 		Tile.initialize();
@@ -69,22 +69,22 @@ public class TowerDefenseGame extends OpenGLDisplay {
 		TowerFast.initialize();
 	}
 
-	protected void createDisplay() throws LWJGLException {
-		Display.create(new PixelFormat(0, 4, 1, 1, 8, 0, 1, 1, false));
-	}
-
 	protected void initializeVariables() {
 		this.gameTimer = new GameTimer(getFramerate());
 		this.programState = EnumProgramState.Menu;
 		this.random = new Random();
 
-		this.menuManager = new MenuManager(getOrthoRight(), getOrthoTop(), random);
+		this.menuManager = new MenuManager((int) orthographicProjection.getRight(), (int) orthographicProjection.getTop(), random);
 		this.gameManager = new GameManager();
 		this.levelEditor = new LevelEditor();
 
 		this.nextLevelName = "prototype_level_1";
 
 		this.showFramerate = false;
+	}
+
+	protected void cleanUp() {
+		// TODO: Add any clean up of resources here.
 	}
 
 	protected void tick() {
@@ -123,7 +123,7 @@ public class TowerDefenseGame extends OpenGLDisplay {
 		GL11.glLoadIdentity();
 
 		if (showFramerate) {
-			StringRenderer.addString("FPS: " + getCurrentFPS() + ", (updates: " + getCurrentUPS() + ")", 48, getHeight() - 80, EnumFontSize.Medium, VectorFont.ALIGN_LEFT);
+			StringRenderer.addString("FPS: " + getCurrentFPS() + ", (updates: " + getCurrentUPS() + ")", 48, (int) (height - 80), EnumFontSize.Medium, VectorFont.ALIGN_LEFT);
 		}
 
 		switch (programState) {

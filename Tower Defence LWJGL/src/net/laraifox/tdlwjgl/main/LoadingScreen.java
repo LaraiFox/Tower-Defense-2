@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import net.laraifox.lib.util.MathHelper;
+import net.laraifox.lib.math.MathHelper;
 
 public class LoadingScreen implements Runnable {
 	private Thread thread;

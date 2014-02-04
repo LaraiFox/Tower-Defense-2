@@ -12,8 +12,7 @@ import static org.lwjgl.opengl.GL11.glVertex2i;
 
 import java.awt.Rectangle;
 
-import net.laraifox.lib.math.Vector;
-import net.laraifox.lib.math.Vector2;
+import net.laraifox.lib.math.Vector2f;
 import net.laraifox.tdlwjgl.enums.EnumDirection;
 import net.laraifox.tdlwjgl.enums.EnumEntityType;
 import net.laraifox.tdlwjgl.level.Player;
@@ -40,9 +39,9 @@ public abstract class Entity {
 	private float speed;
 	private Rectangle hitbox;
 
-	private Vector2 position;
-	private Vector2 center;
-	private Vector2 velocity;
+	private Vector2f position;
+	private Vector2f center;
+	private Vector2f velocity;
 	private boolean alive;
 
 	private EnumDirection direction;
@@ -55,9 +54,9 @@ public abstract class Entity {
 		this.speed = entityType.getSpeed();
 		this.hitbox = entityType.getHitbox();
 
-		this.position = new Vector2(0, 0);
-		this.center = new Vector2(ENTITY_SIZE / 2, ENTITY_SIZE / 2);
-		this.velocity = Vector2.Zero();
+		this.position = new Vector2f(0, 0);
+		this.center = new Vector2f(ENTITY_SIZE / 2, ENTITY_SIZE / 2);
+		this.velocity = Vector2f.Zero();
 		this.alive = false;
 
 		this.direction = EnumDirection.None;
@@ -100,7 +99,7 @@ public abstract class Entity {
 	}
 
 	public void setSpawnWaypoint(Waypoint waypoint) {
-		this.position = new Vector2(waypoint.getX(), waypoint.getY()).scale(Tile.getTileSize());
+		this.position = new Vector2f(waypoint.getX(), waypoint.getY()).scale(Tile.getTileSize());
 		this.direction = waypoint.getDirection();
 	}
 
@@ -117,7 +116,7 @@ public abstract class Entity {
 
 			if (waypoint.getX() == x && waypoint.getY() == y) {
 				direction = waypoint.getDirection();
-				velocity = Vector.scale(direction.getVector(), speed);
+				velocity = Vector2f.scale(direction.getVector(), speed);
 				waypointIndex++;
 				if (direction == EnumDirection.None) {
 					player.removeLife();
@@ -142,11 +141,11 @@ public abstract class Entity {
 		health -= damage;
 	}
 
-	public Vector2 getPosition() {
+	public Vector2f getPosition() {
 		return position;
 	}
 
-	public Vector2 getCenter() {
+	public Vector2f getCenter() {
 		return center;
 	}
 

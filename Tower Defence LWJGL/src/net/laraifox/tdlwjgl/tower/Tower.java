@@ -1,6 +1,6 @@
 package net.laraifox.tdlwjgl.tower;
 
-import net.laraifox.lib.math.Vector2;
+import net.laraifox.lib.math.Vector2f;
 import net.laraifox.tdlwjgl.entity.Entity;
 import net.laraifox.tdlwjgl.enums.EnumTowerType;
 import net.laraifox.tdlwjgl.level.Tile;
@@ -15,8 +15,8 @@ public abstract class Tower {
 	private EnumTowerType towerType;
 	private int tiledX, tiledY;
 	private int baseDisplayListID, turretDisplayListID;
-	private Vector2 position;
-	private Vector2 center;
+	private Vector2f position;
+	private Vector2f center;
 	private float theta;
 
 	private int firingRate;
@@ -34,8 +34,8 @@ public abstract class Tower {
 		this.baseDisplayListID = baseDisplayListID;
 		this.turretDisplayListID = turretDisplayListID;
 
-		this.position = new Vector2(tiledX * Tile.getTileSize(), tiledY * Tile.getTileSize());
-		this.center = new Vector2(position).add(new Vector2(getWidth(), getHeight()).scale(0.5));
+		this.position = new Vector2f(tiledX * Tile.getTileSize(), tiledY * Tile.getTileSize());
+		this.center = new Vector2f(position).add(new Vector2f(getWidth(), getHeight()).scale(0.5f));
 		this.theta = -90;
 
 		this.firingRate = towerType.getBaseFiringRate();
@@ -96,7 +96,9 @@ public abstract class Tower {
 		GL11.glEnd();
 		GL11.glEndList();
 
-		return new int[] { baseID, turretID };
+		return new int[] {
+				baseID, turretID
+		};
 	}
 
 	public boolean canFire(GameTimer gameTime) {
@@ -184,11 +186,11 @@ public abstract class Tower {
 		return towerType;
 	}
 
-	public Vector2 getPosition() {
+	public Vector2f getPosition() {
 		return position;
 	}
 
-	public Vector2 getCenter() {
+	public Vector2f getCenter() {
 		return center;
 	}
 
